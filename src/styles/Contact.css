@@ -1,0 +1,243 @@
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.contact-form-wrapper {
+  padding: 3rem;
+  border-radius: 2rem;
+}
+
+.contact-section-title {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.required {
+  color: var(--secondary);
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  padding: 1rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper select {
+  width: 100%;
+  appearance: none;
+  cursor: pointer;
+}
+
+.select-wrapper::after {
+  content: '▼';
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.submit-button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 1rem;
+}
+
+.status-msg {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem;
+  border-radius: 0.8rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.success-msg {
+  background: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.error-msg {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Sidebar Styles */
+.contact-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.info-card, .hours-card {
+  padding: 2.5rem;
+  border-radius: 2rem;
+}
+
+.sidebar-title {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.sidebar-title.small {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  margin-bottom: 2.5rem;
+}
+
+.info-item-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+}
+
+.info-icon-circle {
+  background: var(--grad-primary);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-glow);
+}
+
+.info-details h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+  color: var(--text-muted);
+}
+
+.info-details a, .info-details p {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.social-box h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+}
+
+.social-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-item {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  transition: var(--transition);
+}
+
+.social-item.fb { background: #1877F2; }
+.social-item.ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+.social-item.ln { background: #0A66C2; }
+.social-item.tw { background: #1DA1F2; }
+
+.social-item:hover {
+  transform: translateY(-5px);
+  filter: brightness(1.1);
+}
+
+.hour-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.hour-row span:first-child {
+  color: var(--text-muted);
+}
+
+.closed {
+  color: #f87171;
+  font-weight: 700;
+}
+
+@media (max-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .contact-form-wrapper {
+    padding: 2rem 1.5rem;
+  }
+}

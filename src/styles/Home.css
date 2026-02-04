@@ -1,0 +1,257 @@
+.home-container {
+  position: relative;
+  min-height: 100vh;
+  padding-top: 8rem;
+  overflow: hidden;
+}
+
+/* Background Blobs */
+.blob {
+  position: absolute;
+  filter: blur(80px);
+  z-index: -1;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: move 20s infinite alternate;
+}
+
+.blob-1 {
+  width: 400px;
+  height: 400px;
+  background: var(--primary);
+  top: -10%;
+  left: -5%;
+}
+
+.blob-2 {
+  width: 500px;
+  height: 500px;
+  background: var(--secondary);
+  bottom: -10%;
+  right: -5%;
+  animation-delay: -5s;
+}
+
+.blob-3 {
+  width: 300px;
+  height: 300px;
+  background: var(--accent);
+  top: 40%;
+  right: 15%;
+  animation-delay: -10s;
+}
+
+@keyframes move {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(100px, 50px) scale(1.1); }
+}
+
+.hero-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+  padding-bottom: 6rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 2rem;
+}
+
+.sparkle-icon {
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hero-title {
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -1px;
+}
+
+.typewriter {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.terminal-icon {
+  color: var(--primary);
+}
+
+.typewritten-text {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.cursor {
+  animation: blink 1s step-end infinite;
+  color: var(--primary);
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 540px;
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.hero-visual-wrapper {
+  position: relative;
+}
+
+.hero-main-visual {
+  padding: 2.5rem;
+  border-radius: 2rem;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.code-snippet {
+  font-family: 'Fira Code', monospace;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.code-keyword { color: var(--secondary); }
+.code-name { color: var(--primary); }
+.code-string { color: var(--accent); }
+
+.floating-elements {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.floating-card {
+  position: absolute;
+  padding: 1.2rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  z-index: 2;
+  box-shadow: var(--shadow-glow);
+  animation: float 5s ease-in-out infinite;
+}
+
+.card-1 { top: -20px; left: -40px; animation-delay: 0s; }
+.card-2 { bottom: -20px; right: -40px; animation-delay: 2.5s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.stats-section {
+  padding: 4rem 0;
+}
+
+.stats-glass {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 3rem 2rem;
+  border-radius: 2.5rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-item h2 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.stat-item p {
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.stat-line {
+  width: 2px;
+  height: 60px;
+  background: var(--border);
+}
+
+@media (max-width: 1024px) {
+  .hero-section {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 5rem;
+  }
+  
+  .hero-description {
+    margin-inline: auto;
+  }
+  
+  .typewriter, .hero-actions {
+    justify-content: center;
+  }
+  
+  .card-1, .card-2 {
+    position: static;
+    margin: 1rem auto;
+  }
+  
+  .floating-elements {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    position: static;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-actions {
+    flex-direction: column;
+  }
+  
+  .stats-glass {
+    flex-direction: column;
+    gap: 3rem;
+  }
+  
+  .stat-line {
+    width: 60px;
+    height: 2px;
+  }
+}

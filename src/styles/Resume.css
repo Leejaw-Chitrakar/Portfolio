@@ -1,0 +1,99 @@
+.resume-page {
+  padding-top: 8rem;
+}
+
+.resume-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.resume-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  padding: 4rem;
+  border-radius: 1.5rem;
+}
+
+.resume-section {
+  margin-bottom: 3rem;
+}
+
+.resume-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.experience-item {
+  margin-bottom: 2rem;
+}
+
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.exp-header h4 {
+  font-size: 1.2rem;
+}
+
+.exp-header span {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.exp-company {
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.experience-item ul {
+  padding-left: 1.5rem;
+  list-style: disc;
+  color: var(--text-muted);
+}
+
+.experience-item li {
+  margin-bottom: 0.5rem;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.skill-tag {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.4rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.edu-item h4 {
+  margin-bottom: 0.3rem;
+}
+
+.edu-item p {
+  color: var(--text-muted);
+}
+
+.edu-item span {
+  font-size: 0.9rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+@media (max-width: 992px) {
+  .resume-content {
+    grid-template-columns: 1fr;
+    padding: 2rem;
+  }
+}
