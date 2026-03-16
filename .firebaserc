@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "leejaw-chitrakar-dev"
+  },
+  "targets": {
+    "Profile": {
+      "hosting": {
+        "site": "leejaw-chitrakar-dev"
+      }
+    }
+  }
+}
