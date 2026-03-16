@@ -1,5 +1,5 @@
 .resume-page {
-  padding-top: 8rem;
+  /* Relies on section padding and global main-content padding */
 }
 
 .resume-actions {
@@ -95,5 +95,36 @@
   .resume-content {
     grid-template-columns: 1fr;
     padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .resume-content {
+    padding: 1.5rem;
+    gap: 2rem;
+  }
+
+  .resume-section h3 {
+    font-size: 1.2rem;
+  }
+
+  .exp-header {
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .exp-header span {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .resume-content {
+    padding: 1.2rem;
+  }
+
+  .skill-tag {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
   }
 }

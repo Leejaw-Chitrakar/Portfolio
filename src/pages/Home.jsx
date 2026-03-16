@@ -44,9 +44,9 @@ const Home = () => {
           </div>
 
           <p className="hero-description">
-            I'm a passionate developer who loves turning ideas into clean, 
-            interactive, and user-friendly web experiences. Currently 
-            building 3D showcases and expanding my frontend skills.
+            I'm Leejaw Chitrakar — a passionate developer based in Kathmandu, Nepal, 
+            who loves turning ideas into clean, interactive, and user-friendly web experiences. 
+            Currently studying BSc.CSIT and building impactful MERN stack projects.
           </p>
 
           <div className="hero-actions">
@@ -77,6 +77,7 @@ const Home = () => {
                   <span className="code-keyword">const</span> <span className="code-name">developer</span> = &#123;<br />
                   &nbsp;&nbsp;name: <span className="code-string">'Leejaw Chitrakar'</span>,<br />
                   &nbsp;&nbsp;role: <span className="code-string">'Web Developer'</span>,<br />
+                  &nbsp;&nbsp;location: <span className="code-string">'Kathmandu, Nepal'</span>,<br />
                   &nbsp;&nbsp;passion: <span className="code-string">'Clean Code'</span><br />
                   &#125;;
                 </code>
@@ -90,18 +91,18 @@ const Home = () => {
       <section className="stats-section">
         <div className="container stats-glass glass">
           <div className="stat-item">
-            <h2 className="gradient-text">3+</h2>
-            <p>Years Experience</p>
+            <h2 className="gradient-text">4+</h2>
+            <p>Projects Built</p>
           </div>
           <div className="stat-line"></div>
           <div className="stat-item">
-            <h2 className="gradient-text">50+</h2>
-            <p>Projects Delivered</p>
+            <h2 className="gradient-text">MERN</h2>
+            <p>Stack Expertise</p>
           </div>
           <div className="stat-line"></div>
           <div className="stat-item">
-            <h2 className="gradient-text">25+</h2>
-            <p>Satisfied Clients</p>
+            <h2 className="gradient-text">2024</h2>
+            <p>BSc.CSIT Started</p>
           </div>
         </div>
       </section>

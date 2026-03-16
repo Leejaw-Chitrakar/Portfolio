@@ -1,56 +1,56 @@
-import React from 'react';
-import ProjectCard from '../components/ProjectCard';
-import '../styles/Projects.css';
+import React from "react";
+import ProjectCard from "../components/ProjectCard";
+import "../styles/Projects.css";
 
 const Projects = () => {
   const projectList = [
+    // {
+    //   title: "MERN Stack E-Commerce",
+    //   description:
+    //     "A fully functional MERN stack commerce site built to support local businesses, featuring secure user authentication flows and robust state management.",
+    //   tech: ["MongoDB", "Express.js", "React", "Node.js"],
+    //   image:
+    //     "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80",
+    //   liveUrl: "#",
+    //   githubUrl: "https://github.com/Leejaw-Chitrakar/MERN-PROJECT",
+    // },
     {
-      title: "E-Commerce Nebula",
-      description: "A futuristic shopping experience with real-time stock tracking and AI-powered recommendations.",
-      tech: ["React", "Node.js", "MongoDB", "Stripe"],
-      image: "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80",
-      liveUrl: "#",
-      githubUrl: "#"
+      title: "Kaaputale E-Commerce Site",
+      description:
+        "An e-commerce platform with a focus on delivering optimized user experience (UX) and a clean, responsive design across mobile, tablet, and desktop.",
+      tech: ["ReactJS", "CSS3", "Responsive Design"],
+      image:
+        "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80",
+      liveUrl: "https://kaaputale.web.app",
+      githubUrl: "https://github.com/Leejaw-Chitrakar/Kaaputale",
     },
     {
-      title: "Crypto Pulse Dashboard",
-      description: "Real-time cryptocurrency monitoring tool with predictive analytics and portfolio tracking.",
-      tech: ["React", "Chart.js", "WebSockets", "Tailwind"],
-      image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80",
+      title: "Quiz Game",
+      description:
+        "An interactive browser-based quiz game showcasing dynamic JavaScript logic, DOM manipulation, and engaging user interaction flows.",
+      tech: ["HTML", "CSS", "JavaScript"],
+      image:
+        "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80",
       liveUrl: "#",
-      githubUrl: "#"
+      githubUrl: "https://github.com/Leejaw-Chitrakar/Quiz-Game",
     },
     {
-      title: "Zenith Task Manager",
-      description: "A minimal, productivity-focused task manager with offline support and cloud sync.",
-      tech: ["React", "Firebase", "Redux", "Framer Motion"],
-      image: "https://images.unsplash.com/photo-1540350394557-8d14678e7f91?w=800&q=80",
+      title: "Hangman Game",
+      description:
+        "A classic Hangman game built in C, demonstrating core programming concepts such as arrays, loops, string handling, and game logic implementation in a console environment.",
+      tech: ["C", "Console Application"],
+      image:
+        "https://images.unsplash.com/photo-1540350394557-8d14678e7f91?w=800&q=80",
       liveUrl: "#",
-      githubUrl: "#"
+      githubUrl: "https://github.com/Leejaw-Chitrakar/Hangman",
     },
-    {
-      title: "Vortex Social Network",
-      description: "A decentralized social platform focusing on privacy and user data ownership.",
-      tech: ["React", "Web3.js", "Solidity", "IPFS"],
-      image: "https://images.unsplash.com/photo-1522542550221-31fd1925fb3a?w=800&q=80",
-      liveUrl: "#",
-      githubUrl: "#"
-    },
-    {
-      title: "Kaaputale: Handcrafted Elegance",
-      description: "A high-end, responsive e-commerce interface designed for a niche artisanal brand, featuring glassmorphism and immersive animations.",
-      tech: ["React", "Tailwind CSS", "Framer Motion"],
-      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80",
-      liveUrl: "#",
-      githubUrl: "#"
-    }
   ];
 
   return (
     <div className="projects-page container section fade-in">
       <div className="section-header">
         <h2 className="gradient-text">Featured Projects</h2>
-        <p>A collection of my recent work and personal experiments</p>
+        <p>A collection of my real-world work and personal experiments</p>
       </div>
 
       <div className="projects-grid">

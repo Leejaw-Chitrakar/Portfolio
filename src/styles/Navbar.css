@@ -4,16 +4,25 @@
 
 .navbar {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3rem);
+  max-width: 1200px;
   z-index: 1000;
-  padding: 1.5rem 0;
+  padding: 0.8rem 1.5rem;
   transition: var(--transition);
+  border-radius: 3rem;
+  border: 1px solid transparent;
 }
 
 .navbar.scrolled {
-  padding: 1rem 0;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  padding: 0.6rem 1.5rem;
 }
 
 .nav-container {
@@ -39,7 +48,7 @@
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 2rem;
 }
 
 .nav-link {
@@ -74,24 +83,33 @@
 }
 
 .mobile-menu {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 80%;
-  height: 100vh;
-  padding: 5rem 2rem;
-  transition: 0.4s ease-in-out;
-  z-index: 999;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-15px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
 }
 
 .mobile-menu.open {
-  right: 0;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .mobile-nav-links {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+  align-items: center;
 }
 
 .btn-sm {
@@ -107,5 +125,40 @@
   .mobile-toggle {
     display: block;
     z-index: 1001;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    top: 1rem;
+    width: calc(100% - 2rem);
+  }
+
+  .logo {
+    font-size: 1.3rem;
+  }
+  
+  .mobile-nav-links .nav-link {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    top: 0.8rem;
+    width: calc(100% - 1.5rem);
+    padding: 0.6rem 1rem;
+  }
+
+  .navbar.scrolled {
+    padding: 0.5rem 1rem;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  .mobile-menu {
+    padding: 1.5rem;
   }
 }

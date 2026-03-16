@@ -7,7 +7,7 @@ import {
   Facebook, 
   Instagram, 
   Linkedin, 
-  Twitter,
+  Github,
   Clock,
   Loader2,
   CheckCircle2,
@@ -221,6 +221,7 @@ const Contact = () => {
                 <a href="https://www.facebook.com/leejaw.chitrakar10" className="social-item fb" target="_blank" rel="noopener noreferrer"><Facebook size={20} /></a>
                 <a href="https://www.instagram.com/leejawchitrakar" className="social-item ig" target="_blank" rel="noopener noreferrer"><Instagram size={20} /></a>
                 <a href="https://www.linkedin.com/in/leejaw-chitrakar-254151313/" className="social-item ln" target="_blank" rel="noopener noreferrer"><Linkedin size={20} /></a>
+                <a href="https://github.com/Leejaw-Chitrakar" className="social-item gh" target="_blank" rel="noopener noreferrer"><Github size={20} /></a>
               </div>
             </div>
           </div>

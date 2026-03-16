@@ -1,7 +1,7 @@
 .home-container {
   position: relative;
-  min-height: 100vh;
-  padding-top: 8rem;
+  min-height: calc(100vh - var(--nav-height));
+  padding-top: 2rem;
   overflow: hidden;
 }
 
@@ -215,22 +215,22 @@
   .hero-section {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 5rem;
+    gap: 3rem;
   }
-  
+
   .hero-description {
     margin-inline: auto;
   }
-  
+
   .typewriter, .hero-actions {
     justify-content: center;
   }
-  
+
   .card-1, .card-2 {
     position: static;
     margin: 1rem auto;
   }
-  
+
   .floating-elements {
     display: flex;
     justify-content: center;
@@ -240,18 +240,74 @@
   }
 }
 
+@media (max-width: 768px) {
+  .home-container {
+    padding-top: 1rem;
+  }
+
+  .hero-section {
+    gap: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  .blob-1 { width: 250px; height: 250px; }
+  .blob-2 { width: 300px; height: 300px; }
+  .blob-3 { width: 180px; height: 180px; }
+
+  .floating-elements {
+    display: none;
+  }
+
+  .hero-main-visual {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .code-snippet {
+    font-size: 0.85rem;
+  }
+
+  .stats-glass {
+    padding: 2rem 1rem;
+    gap: 1.5rem;
+  }
+
+  .stat-item h2 {
+    font-size: 2rem;
+  }
+}
+
 @media (max-width: 640px) {
   .hero-actions {
     flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
   }
-  
+
   .stats-glass {
     flex-direction: column;
-    gap: 3rem;
+    gap: 2rem;
   }
-  
+
   .stat-line {
     width: 60px;
     height: 2px;
   }
 }
+
+@media (max-width: 480px) {
+  .home-container {
+    padding-top: 0rem;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .typewriter {
+    font-size: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+

@@ -10,7 +10,7 @@
   --text-muted: #94a3b8;
   --glass: rgba(30, 41, 59, 0.7);
   --border: rgba(255, 255, 255, 0.1);
-  --nav-height: 80px;
+  --nav-height: 100px;
   
   /* Gradients */
   --grad-primary: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
@@ -83,7 +83,7 @@ main {
 }
 
 .section {
-  padding: 4rem 0;
+  padding: 2.5rem 0;
   flex: 1;
 }
 
@@ -166,6 +166,25 @@ main {
 
 @media (max-width: 768px) {
   .section {
-    padding: 4rem 0;
+    padding: 1.5rem 0;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+  }
+
+  .section-header p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
   }
 }

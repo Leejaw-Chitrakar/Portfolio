@@ -1,6 +1,13 @@
-import React from 'react';
-import { User, Briefcase, GraduationCap } from 'lucide-react';
-import '../styles/About.css';
+import React from "react";
+import {
+  User,
+  Briefcase,
+  GraduationCap,
+  MapPin,
+  Phone,
+  Mail,
+} from "lucide-react";
+import "../styles/About.css";
 
 const About = () => {
   return (
@@ -12,9 +19,9 @@ const About = () => {
 
       <div className="about-grid">
         <div className="about-image-container glass">
-          <img 
-            src="https://media.licdn.com/dms/image/v2/D5603AQEQ6scsnRP-Fw/profile-displayphoto-shrink_800_800/B56ZbzKOvuHUAk-/0/1747836268039?e=1771459200&v=beta&t=iTQlTBaONN_QqJqtFtp4a1hOIq0v5Nq6D_3IKI-Id20" 
-            alt="Leejaw Chitrakar" 
+          <img
+            src="https://i.postimg.cc/pdMD8NWc/B7A2955.jpg"
+            alt="Leejaw Chitrakar"
             className="about-image"
           />
         </div>
@@ -25,16 +32,32 @@ const About = () => {
             <h3>Professional Bio</h3>
           </div>
           <p>
-            Hi, I'm Leejaw Chitrakar, a passionate Web Developer who loves turning ideas 
-            into clean, interactive, and user-friendly web experiences. I enjoy building 
-            things from scratch and understanding how everything works under the hood.
+            Hi, I'm <strong>Leejaw Chitrakar</strong> — a highly motivated and
+            detail-oriented Web Developer based in Kathmandu, Nepal. I love
+            turning ideas into clean, interactive, and user-friendly web
+            experiences, building things from scratch and understanding how
+            everything works under the hood.
           </p>
           <p>
-            I work mainly with HTML, CSS, JavaScript, and I'm actively expanding my skills 
-            in React and modern frontend tools. I care deeply about clean code, good UI/UX, 
-            and continuous learning. Currently, I'm studying at Samriddhi College and 
-            focused on building impactful digital products.
+            I'm proficient in HTML and CSS, with intermediate skills in
+            JavaScript, React, C, and C++. I'm actively expanding my skills in
+            the MERN stack (MongoDB, Express, React, Node.js) and am passionate
+            about responsive design, RESTful APIs, and continuous learning.
           </p>
+          <div className="contact-info-list">
+            <div className="contact-info-item">
+              <Mail size={16} color="var(--primary)" />
+              <span>leejaw.chitrakar10@gmail.com</span>
+            </div>
+            <div className="contact-info-item">
+              <Phone size={16} color="var(--secondary)" />
+              <span>9841996363</span>
+            </div>
+            <div className="contact-info-item">
+              <MapPin size={16} color="var(--accent)" />
+              <span>Kathmandu, Nepal</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -43,18 +66,18 @@ const About = () => {
           <div className="stat-card glass">
             <Briefcase size={32} color="var(--primary)" />
             <div className="stat-info">
-              <h4>Experience</h4>
-              <p>Aspiring Web Developer</p>
-              <span>Learning & Building</span>
+              <h4>Role</h4>
+              <p>Web Developer</p>
+              <span>MERN Stack &amp; Frontend</span>
             </div>
           </div>
-          
+
           <div className="stat-card glass">
             <GraduationCap size={32} color="var(--secondary)" />
             <div className="stat-info">
               <h4>Education</h4>
-              <p>CSIT Student</p>
-              <span>Samriddhi College</span>
+              <p>BSc.CSIT Student</p>
+              <span>Tribhuvan University — 2024–Present</span>
             </div>
           </div>
         </div>
@@ -66,33 +89,46 @@ const About = () => {
           <div className="timeline-item glass">
             <div className="timeline-dot"></div>
             <div className="timeline-content">
-              <h4>Kaaputale: Handcrafted Elegance</h4>
+              <h4>MERN Stack E-Commerce Project</h4>
               <span className="timeline-date">Present</span>
-              <p>Developed a high-end e-commerce interface with glassmorphism and Framer Motion.</p>
+              <p>
+                Built a fully functional MERN stack commerce site supporting
+                local businesses, with secure user authentication and robust
+                state management.
+              </p>
             </div>
           </div>
           <div className="timeline-item glass">
             <div className="timeline-dot"></div>
             <div className="timeline-content">
-              <h4>Fashion Verse</h4>
+              <h4>Kaaputale E-Commerce Site</h4>
               <span className="timeline-date">Present</span>
-              <p>Building a 3D clothing showcase using Three.js and modern frontend tools.</p>
+              <p>
+                Developed a responsive e-commerce platform using ReactJS with a
+                focus on optimized UX and clean design across all devices.
+              </p>
             </div>
           </div>
           <div className="timeline-item glass">
             <div className="timeline-dot"></div>
             <div className="timeline-content">
-              <h4>College Exhibition</h4>
-              <span className="timeline-date">2024</span>
-              <p>Developed a Bluetooth-controlled car, showcasing hardware and software integration.</p>
-            </div>
-          </div>
-          <div className="timeline-item glass">
-            <div className="timeline-dot"></div>
-            <div className="timeline-content">
-              <h4>Interactive Games</h4>
+              <h4>Interactive Games — Quiz &amp; Hangman</h4>
               <span className="timeline-date">Discovery Phase</span>
-              <p>Created interactive quiz games to experiment with logic and user engagement.</p>
+              <p>
+                Created interactive browser games showcasing core JavaScript
+                logic, programming concepts, and user engagement.
+              </p>
+            </div>
+          </div>
+          <div className="timeline-item glass">
+            <div className="timeline-dot"></div>
+            <div className="timeline-content">
+              <h4>BSc.CSIT — Tribhuvan University</h4>
+              <span className="timeline-date">2024</span>
+              <p>
+                Started Bachelor of Science in Computer Science and Information
+                Technology at Kathmandu, Ason Ward 25, Bagmati Province.
+              </p>
             </div>
           </div>
         </div>
