@@ -19,8 +19,7 @@ const Projects = () => {
       description:
         "An e-commerce platform with a focus on delivering optimized user experience (UX) and a clean, responsive design across mobile, tablet, and desktop.",
       tech: ["ReactJS", "CSS3", "Responsive Design"],
-      image:
-        "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80",
+      image: "https://i.postimg.cc/htsg4YZd/IMG-20260207-WA0000.jpg",
       liveUrl: "https://kaaputale.web.app",
       githubUrl: "https://github.com/Leejaw-Chitrakar/Kaaputale",
     },
@@ -29,8 +28,7 @@ const Projects = () => {
       description:
         "An interactive browser-based quiz game showcasing dynamic JavaScript logic, DOM manipulation, and engaging user interaction flows.",
       tech: ["HTML", "CSS", "JavaScript"],
-      image:
-        "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80",
+      image: "https://i.postimg.cc/rwPn9CKY/quiz_Game.png",
       liveUrl: "#",
       githubUrl: "https://github.com/Leejaw-Chitrakar/Quiz-Game",
     },

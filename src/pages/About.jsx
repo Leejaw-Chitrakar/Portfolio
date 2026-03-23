@@ -89,6 +89,28 @@ const About = () => {
           <div className="timeline-item glass">
             <div className="timeline-dot"></div>
             <div className="timeline-content">
+              <h4>Interactive Games — Quiz &amp; Hangman</h4>
+              <span className="timeline-date">Discovery Phase</span>
+              <p>
+                Created interactive browser games showcasing core JavaScript
+                logic, programming concepts, and user engagement.
+              </p>
+            </div>
+          </div>
+          <div className="timeline-item glass">
+            <div className="timeline-dot"></div>
+            <div className="timeline-content">
+              <h4>BSc.CSIT — Tribhuvan University</h4>
+              <span className="timeline-date">2024</span>
+              <p>
+                Started Bachelor of Science in Computer Science and Information
+                Technology at Kathmandu, Ason Ward 25, Bagmati Province.
+              </p>
+            </div>
+          </div>
+          <div className="timeline-item glass">
+            <div className="timeline-dot"></div>
+            <div className="timeline-content">
               <h4>MERN Stack E-Commerce Project</h4>
               <span className="timeline-date">Present</span>
               <p>
@@ -106,28 +128,6 @@ const About = () => {
               <p>
                 Developed a responsive e-commerce platform using ReactJS with a
                 focus on optimized UX and clean design across all devices.
-              </p>
-            </div>
-          </div>
-          <div className="timeline-item glass">
-            <div className="timeline-dot"></div>
-            <div className="timeline-content">
-              <h4>Interactive Games — Quiz &amp; Hangman</h4>
-              <span className="timeline-date">Discovery Phase</span>
-              <p>
-                Created interactive browser games showcasing core JavaScript
-                logic, programming concepts, and user engagement.
-              </p>
-            </div>
-          </div>
-          <div className="timeline-item glass">
-            <div className="timeline-dot"></div>
-            <div className="timeline-content">
-              <h4>BSc.CSIT — Tribhuvan University</h4>
-              <span className="timeline-date">2024</span>
-              <p>
-                Started Bachelor of Science in Computer Science and Information
-                Technology at Kathmandu, Ason Ward 25, Bagmati Province.
               </p>
             </div>
           </div>

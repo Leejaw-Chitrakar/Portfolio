@@ -1,5 +1,5 @@
 import React from "react";
-import { GraduationCap, Award, Code2 } from "lucide-react";
+import { GraduationCap, Award, Code2, ExternalLink } from "lucide-react";
 import "../styles/Resume.css";
 
 const Resume = () => {
@@ -126,23 +126,18 @@ const Resume = () => {
 
             <div className="experience-item">
               <div className="exp-header">
-                <h4>Project Management Certificate</h4>
-                <span>October 2025</span>
+                <h4>Web Development Bootcamp</h4>
+                <span>July 2025</span>
               </div>
-              <p className="exp-company">Skilllab</p>
+              <p className="exp-company">Samriddhi IT Club</p>
               <ul>
                 <li>
-                  Mastered principles of project initiation, planning,
-                  execution, and closing.
-                </li>
-                <li>
-                  Trained in task management, resource allocation, and
-                  maintaining project scope.
+                  Successfully completed an intensive bootcamp covering modern web technologies.
                 </li>
               </ul>
               <p className="exp-company">
                 <a
-                  href="https://1drv.ms/b/c/e932a4b4043f333d/IQBe-LubboSBSYHdN5zqWgqNAQ2xHthcxBQhjnia_5HApv8?e=CJlgaz"
+                  href="https://i.postimg.cc/LXNbsRvP/Bootcamp.png"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -153,20 +148,92 @@ const Resume = () => {
 
             <div className="experience-item">
               <div className="exp-header">
-                <h4>Red Hat Academy – Linux Fundamentals</h4>
-                <span>Completed</span>
+                <h4>Volunteer – Hult Prize Samriddhi</h4>
+                <span>February 2026</span>
               </div>
-              <p className="exp-company">Red Hat Academy</p>
+              <p className="exp-company">Web & Tech Team</p>
               <ul>
                 <li>
-                  Focused on command-line proficiency, file system management,
-                  and server environments.
-                </li>
-                <li>
-                  Provides a strong foundation for deploying and managing web
-                  applications.
+                  Contributed as part of the Web & Tech Team for the Hult Prize On-Campus Program.
                 </li>
               </ul>
+              <p className="exp-company">
+                <a
+                  href="https://i.postimg.cc/1XXYnTYV/Hult_Web_Tech.png"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Certificate ↗
+                </a>
+              </p>
+            </div>
+
+            <div className="experience-item">
+              <div className="exp-header">
+                <h4>Project Management Certificate</h4>
+                <span>October 2025</span>
+              </div>
+              <p className="exp-company">Skill Lab</p>
+              <p className="exp-company">
+                <a
+                  href="https://i.postimg.cc/qqqZhYZh/Project_Management.jpg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Certificate ↗
+                </a>
+              </p>
+            </div>
+
+            <div className="experience-item">
+              <div className="exp-header">
+                <h4>Getting Started with Linux (RH104)</h4>
+                <span>March 2025</span>
+              </div>
+              <p className="exp-company">Red Hat Academy</p>
+              <p className="exp-company">
+                <a
+                  href="https://i.postimg.cc/qRj570Q2/Redhat.jpg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Certificate ↗
+                </a>
+              </p>
+            </div>
+
+            <div className="experience-item">
+              <div className="exp-header">
+                <h4>Hult Prize Participation</h4>
+                <span>February 2025</span>
+              </div>
+              <p className="exp-company">Hult Prize Foundation</p>
+              <p className="exp-company">
+                <a
+                  href="https://i.postimg.cc/j5ZFjKvw/Hult_Participation.png"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Certificate ↗
+                </a>
+              </p>
+            </div>
+
+            <div className="experience-item">
+              <div className="exp-header">
+                <h4>Certificate of Appreciation – Lakshayrambh</h4>
+                <span>June 2025</span>
+              </div>
+              <p className="exp-company">CSIT Association of Nepal</p>
+              <p className="exp-company">
+                <a
+                  href="https://i.postimg.cc/0jjHM3HG/Lakshyaarambha.png"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Certificate ↗
+                </a>
+              </p>
             </div>
           </section>
         </div>

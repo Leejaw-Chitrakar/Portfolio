@@ -1,7 +1,7 @@
 .home-container {
   position: relative;
   min-height: calc(100vh - var(--nav-height));
-  padding-top: 2rem;
+  padding-top: 5rem; /* Increased to account for fixed navbar */
   overflow: hidden;
 }
 
@@ -178,7 +178,7 @@
 }
 
 .stats-section {
-  padding: 4rem 0;
+  padding: 6rem 0; /* More breathing room */
 }
 
 .stats-glass {
@@ -278,20 +278,35 @@
 }
 
 @media (max-width: 640px) {
+  .home-container {
+    padding-top: 7rem; /* More space for the floating navbar on mobile */
+  }
+
+  .hero-section {
+    gap: 3rem;
+    padding-bottom: 4rem;
+  }
+
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
   }
 
+  .stats-section {
+    padding: 2rem 0 3rem;
+  }
+
   .stats-glass {
     flex-direction: column;
     gap: 2rem;
+    padding: 2.5rem 1.5rem;
   }
 
   .stat-line {
     width: 60px;
-    height: 2px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
   }
 }
 
