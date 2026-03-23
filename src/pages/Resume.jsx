@@ -132,10 +132,11 @@ const Resume = () => {
               <p className="exp-company">Samriddhi IT Club</p>
               <ul>
                 <li>
-                  Successfully completed an intensive bootcamp covering modern web technologies.
+                  Successfully completed an intensive bootcamp covering modern
+                  web technologies.
                 </li>
               </ul>
-              <p className="exp-company">
+              {/* <p className="exp-company">
                 <a
                   href="https://i.postimg.cc/LXNbsRvP/Bootcamp.png"
                   target="_blank"
@@ -143,7 +144,7 @@ const Resume = () => {
                 >
                   View Certificate ↗
                 </a>
-              </p>
+              </p> */}
             </div>
 
             <div className="experience-item">
@@ -154,10 +155,11 @@ const Resume = () => {
               <p className="exp-company">Web & Tech Team</p>
               <ul>
                 <li>
-                  Contributed as part of the Web & Tech Team for the Hult Prize On-Campus Program.
+                  Contributed as part of the Web & Tech Team for the Hult Prize
+                  On-Campus Program.
                 </li>
               </ul>
-              <p className="exp-company">
+              {/* <p className="exp-company">
                 <a
                   href="https://i.postimg.cc/1XXYnTYV/Hult_Web_Tech.png"
                   target="_blank"
@@ -165,7 +167,7 @@ const Resume = () => {
                 >
                   View Certificate ↗
                 </a>
-              </p>
+              </p> */}
             </div>
 
             <div className="experience-item">
@@ -174,7 +176,7 @@ const Resume = () => {
                 <span>October 2025</span>
               </div>
               <p className="exp-company">Skill Lab</p>
-              <p className="exp-company">
+              {/* <p className="exp-company">
                 <a
                   href="https://i.postimg.cc/qqqZhYZh/Project_Management.jpg"
                   target="_blank"
@@ -182,7 +184,7 @@ const Resume = () => {
                 >
                   View Certificate ↗
                 </a>
-              </p>
+              </p> */}
             </div>
 
             <div className="experience-item">
@@ -191,7 +193,7 @@ const Resume = () => {
                 <span>March 2025</span>
               </div>
               <p className="exp-company">Red Hat Academy</p>
-              <p className="exp-company">
+              {/* <p className="exp-company">
                 <a
                   href="https://i.postimg.cc/qRj570Q2/Redhat.jpg"
                   target="_blank"
@@ -199,7 +201,7 @@ const Resume = () => {
                 >
                   View Certificate ↗
                 </a>
-              </p>
+              </p> */}
             </div>
 
             <div className="experience-item">
@@ -208,7 +210,7 @@ const Resume = () => {
                 <span>February 2025</span>
               </div>
               <p className="exp-company">Hult Prize Foundation</p>
-              <p className="exp-company">
+              {/* <p className="exp-company">
                 <a
                   href="https://i.postimg.cc/j5ZFjKvw/Hult_Participation.png"
                   target="_blank"
@@ -216,7 +218,7 @@ const Resume = () => {
                 >
                   View Certificate ↗
                 </a>
-              </p>
+              </p> */}
             </div>
 
             <div className="experience-item">
@@ -225,7 +227,7 @@ const Resume = () => {
                 <span>June 2025</span>
               </div>
               <p className="exp-company">CSIT Association of Nepal</p>
-              <p className="exp-company">
+              {/* <p className="exp-company">
                 <a
                   href="https://i.postimg.cc/0jjHM3HG/Lakshyaarambha.png"
                   target="_blank"
@@ -233,7 +235,7 @@ const Resume = () => {
                 >
                   View Certificate ↗
                 </a>
-              </p>
+              </p> */}
             </div>
           </section>
         </div>
