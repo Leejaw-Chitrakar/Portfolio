@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import {
   User,
   Briefcase,
@@ -8,6 +9,61 @@ import {
   Mail,
 } from "lucide-react";
 import "../styles/About.css";
+
+const AnimatedCharacter = ({ children }) => (
+  <motion.span
+    variants={{
+      hidden: { opacity: 0, display: "none" },
+      visible: { opacity: 1, display: "inline" },
+    }}
+  >
+    {children}
+  </motion.span>
+);
+
+const TypewriterParagraph = ({ children, delay = 0 }) => {
+  return (
+    <motion.p
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-10px" }}
+      variants={{
+        visible: {
+          transition: { staggerChildren: 0.01, delayChildren: delay },
+        },
+        hidden: {},
+      }}
+    >
+      {React.Children.toArray(children).map((child, i) => {
+        if (typeof child === "string") {
+          return child
+            .split("")
+            .map((char, index) => (
+              <AnimatedCharacter key={`${i}-${index}`}>
+                {char}
+              </AnimatedCharacter>
+            ));
+        }
+        if (React.isValidElement(child) && child.type === "strong") {
+          return (
+            <strong key={`strong-${i}`}>
+              {typeof child.props.children === "string"
+                ? child.props.children
+                    .split("")
+                    .map((char, index) => (
+                      <AnimatedCharacter key={`${i}-${index}`}>
+                        {char}
+                      </AnimatedCharacter>
+                    ))
+                : child.props.children}
+            </strong>
+          );
+        }
+        return child;
+      })}
+    </motion.p>
+  );
+};
 
 const About = () => {
   return (
@@ -84,53 +140,54 @@ const About = () => {
       </div>
 
       <div className="experience-timeline">
-        <h3 className="sub-title">Journey So Far</h3>
+        <motion.h3
+          className="sub-title"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6 }}
+        >
+          Journey So Far
+        </motion.h3>
         <div className="timeline">
-          <div className="timeline-item glass">
-            <div className="timeline-dot"></div>
-            <div className="timeline-content">
-              <h4>Interactive Games — Quiz &amp; Hangman</h4>
-              <span className="timeline-date">Discovery Phase</span>
-              <p>
-                Created interactive browser games showcasing core JavaScript
-                logic, programming concepts, and user engagement.
-              </p>
-            </div>
-          </div>
-          <div className="timeline-item glass">
-            <div className="timeline-dot"></div>
-            <div className="timeline-content">
-              <h4>BSc.CSIT — Tribhuvan University</h4>
-              <span className="timeline-date">2024</span>
-              <p>
-                Started Bachelor of Science in Computer Science and Information
-                Technology at Kathmandu, Ason Ward 25, Bagmati Province.
-              </p>
-            </div>
-          </div>
-          <div className="timeline-item glass">
-            <div className="timeline-dot"></div>
-            <div className="timeline-content">
-              <h4>MERN Stack E-Commerce Project</h4>
-              <span className="timeline-date">Present</span>
-              <p>
-                Built a fully functional MERN stack commerce site supporting
-                local businesses, with secure user authentication and robust
-                state management.
-              </p>
-            </div>
-          </div>
-          <div className="timeline-item glass">
-            <div className="timeline-dot"></div>
-            <div className="timeline-content">
-              <h4>Kaaputale E-Commerce Site</h4>
-              <span className="timeline-date">Present</span>
-              <p>
-                Developed a responsive e-commerce platform using ReactJS with a
-                focus on optimized UX and clean design across all devices.
-              </p>
-            </div>
-          </div>
+          {[
+            {
+              title: "Interactive Games — Quiz & Hangman",
+              date: "Discovery Phase",
+              desc: "Created interactive browser games showcasing core JavaScript logic, programming concepts, and user engagement.",
+            },
+            {
+              title: "BSc.CSIT — Tribhuvan University",
+              date: "2024",
+              desc: "Started Bachelor of Science in Computer Science and Information Technology at Kathmandu, Ason Ward 25, Bagmati Province.",
+            },
+            {
+              title: "MERN Stack E-Commerce Project",
+              date: "Present",
+              desc: "Built a fully functional MERN stack commerce site supporting local businesses, with secure user authentication and robust state management.",
+            },
+            {
+              title: "Kaaputale E-Commerce Site",
+              date: "Present",
+              desc: "Developed a responsive e-commerce platform using ReactJS with a focus on optimized UX and clean design across all devices.",
+            },
+          ].map((item, index) => (
+            <motion.div
+              className="timeline-item glass"
+              key={index}
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: index * 0.15 }}
+            >
+              <div className="timeline-dot"></div>
+              <div className="timeline-content">
+                <h4>{item.title}</h4>
+                <span className="timeline-date">{item.date}</span>
+                <p>{item.desc}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>

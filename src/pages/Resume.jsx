@@ -176,15 +176,30 @@ const Resume = () => {
                 <span>October 2025</span>
               </div>
               <p className="exp-company">Skill Lab</p>
-              {/* <p className="exp-company">
-                <a
-                  href="https://i.postimg.cc/qqqZhYZh/Project_Management.jpg"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Certificate ↗
-                </a>
-              </p> */}
+            </div>
+
+            <div className="experience-item">
+              <div className="exp-header">
+                <h4>AI and Prompt Engineering</h4>
+                <span>December 2025</span>
+              </div>
+              <p className="exp-company">Skill Lab</p>
+            </div>
+
+            <div className="experience-item">
+              <div className="exp-header">
+                <h4>Leadership Basic Course</h4>
+                <span>December 2025</span>
+              </div>
+              <p className="exp-company">Skill Lab</p>
+            </div>
+
+            <div className="experience-item">
+              <div className="exp-header">
+                <h4>Project Management (Skill Lab)</h4>
+                <span>October 2025</span>
+              </div>
+              <p className="exp-company">Skill Lab</p>
             </div>
 
             <div className="experience-item">

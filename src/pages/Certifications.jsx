@@ -45,6 +45,27 @@ const certifications = [
     credentialUrl: "https://i.postimg.cc/qRj570Q2/Redhat.jpg",
     logo: "https://i.postimg.cc/Xvcsq3xN/Red-Hat.pngng",
   },
+  {
+    title: "AI and Prompt Engineering",
+    issuer: "Skill Lab",
+    date: "Dec 2025",
+    credentialUrl: "https://i.postimg.cc/yxMG63rg/AI-Prompting.png",
+    logo: "https://i.postimg.cc/3wMqWtTZ/SKill-Lab.png",
+  },
+  {
+    title: "Leadership Basic Course",
+    issuer: "Skill Lab",
+    date: "Dec 2025",
+    credentialUrl: "https://i.postimg.cc/1XnTZrM9/Leadership-Basic.png",
+    logo: "https://i.postimg.cc/3wMqWtTZ/SKill-Lab.png",
+  },
+  {
+    title: "Project Management",
+    issuer: "Skill Lab",
+    date: "Oct 2025",
+    credentialUrl: "https://i.postimg.cc/zvsQDHPg/Project-Management.png",
+    logo: "https://i.postimg.cc/3wMqWtTZ/SKill-Lab.png",
+  },
 ];
 
 const Certifications = () => {
