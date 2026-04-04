@@ -3,6 +3,7 @@ import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import AppRoutes from './RouteLayout/routes.jsx';
+import CustomCursor from './components/CustomCursor.jsx';
 import './styles/global.css';
 
 // Scroll to top on route change
@@ -18,6 +19,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <CustomCursor />
       <div className="app-container">
         <Navbar />
         <main id="main-content">
