@@ -4,16 +4,15 @@ import "../styles/Projects.css";
 
 const Projects = () => {
   const projectList = [
-    // {
-    //   title: "MERN Stack E-Commerce",
-    //   description:
-    //     "A fully functional MERN stack commerce site built to support local businesses, featuring secure user authentication flows and robust state management.",
-    //   tech: ["MongoDB", "Express.js", "React", "Node.js"],
-    //   image:
-    //     "https://images.unsplash.com/photo-1557821552-17105176677c?w=800&q=80",
-    //   liveUrl: "#",
-    //   githubUrl: "https://github.com/Leejaw-Chitrakar/MERN-PROJECT",
-    // },
+    {
+      title: "VibeCouture Fashion Store",
+      description:
+        "A premium MERN stack fashion e-commerce platform featuring high-end aesthetics, robust state management, and a seamless shopping experience.",
+      tech: ["MongoDB", "Express.js", "React", "Node.js", "Firebase"],
+      image: "/projects/vibecouture.png",
+      liveUrl: "https://vibecouture.web.app",
+      githubUrl: "https://github.com/Leejaw-Chitrakar/VibeCouture",
+    },
     {
       title: "Kaaputale E-Commerce Site",
       description:
@@ -29,8 +28,26 @@ const Projects = () => {
         "An interactive browser-based quiz game showcasing dynamic JavaScript logic, DOM manipulation, and engaging user interaction flows.",
       tech: ["HTML", "CSS", "JavaScript"],
       image: "https://i.postimg.cc/rwPn9CKY/quiz_Game.png",
-      liveUrl: "#",
+      liveUrl: "https://leejaw-chitrakar.github.io/Quiz-Game/",
       githubUrl: "https://github.com/Leejaw-Chitrakar/Quiz-Game",
+    },
+    {
+      title: "Snake Game",
+      description:
+        "A modern, high-performance implementation of the classic Snake game featuring smooth animations, responsive controls, and a sleek, minimalist UI.",
+      tech: ["HTML", "CSS", "JavaScript", "Animation"],
+      image: "/projects/snake-game.png",
+      liveUrl: "https://leejaw-chitrakar.github.io/Snake-Game/",
+      githubUrl: "https://github.com/Leejaw-Chitrakar/Snake-Game",
+    },
+    {
+      title: "Hult Prize at Samriddhi",
+      description:
+        "An official web platform for Hult Prize at Samriddhi College — empowering students to tackle the world's pressing social challenges through entrepreneurship and innovation.",
+      tech: ["React", "Firebase", "CSS3", "Responsive Design"],
+      image: "/projects/hultprize.png",
+      liveUrl: "https://hultprizeatsamriddhi.web.app/",
+      githubUrl: "#",
     },
     {
       title: "Hangman Game",
@@ -38,7 +55,7 @@ const Projects = () => {
         "A classic Hangman game built in C, demonstrating core programming concepts such as arrays, loops, string handling, and game logic implementation in a console environment.",
       tech: ["C", "Console Application"],
       image:
-        "https://images.unsplash.com/photo-1540350394557-8d14678e7f91?w=800&q=80",
+        "https://images.unsplash.com/photo-1753285310764-54c9571eff70?q=80&w=665&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       liveUrl: "#",
       githubUrl: "https://github.com/Leejaw-Chitrakar/Hangman",
     },
