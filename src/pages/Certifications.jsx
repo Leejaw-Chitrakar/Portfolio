@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Award, ExternalLink, CalendarDays, X } from "lucide-react";
+import { Award, ExternalLink, CalendarDays, X, ChevronRight, Verified } from "lucide-react";
 import "../styles/Certifications.css";
 
 const certifications = [
@@ -68,18 +68,44 @@ const certifications = [
   },
 ];
 
+// Grouping into sets of 3 for the Multi-Stack Grid
+const stackedCerts = [
+  {
+    id: "stack-1",
+    category: "Tech & Development",
+    theme: "theme-blue",
+    certs: [certifications[0], certifications[5], certifications[6]],
+  },
+  {
+    id: "stack-2",
+    category: "Leadership & Management",
+    theme: "theme-purple",
+    certs: [certifications[4], certifications[7], certifications[8]],
+  },
+  {
+    id: "stack-3",
+    category: "Community & Awards",
+    theme: "theme-emerald",
+    certs: [certifications[2], certifications[1], certifications[3]],
+  },
+];
+
 const Certifications = () => {
-  const [selectedCert, setSelectedCert] = useState(null);
+  const [selectedStack, setSelectedStack] = useState(null);
+  const [fullscreenImage, setFullscreenImage] = useState(null);
 
   // Close modal on ESC key
   useEffect(() => {
     const handleEsc = (e) => {
-      if (e.key === "Escape") setSelectedCert(null);
+      if (e.key === "Escape") {
+        setFullscreenImage(null);
+        setSelectedStack(null);
+      }
     };
     window.addEventListener("keydown", handleEsc);
-    
-    // Prevent scrolling when modal is open
-    if (selectedCert) {
+
+    // Prevent scrolling when either modal is open
+    if (selectedStack || fullscreenImage) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -89,96 +115,118 @@ const Certifications = () => {
       window.removeEventListener("keydown", handleEsc);
       document.body.style.overflow = "unset";
     };
-  }, [selectedCert]);
+  }, [selectedStack, fullscreenImage]);
 
   return (
     <>
       <div className="certs-page container section fade-in">
-      <div className="section-header">
-        <h2 className="gradient-text">Certifications</h2>
-        <p>Credentials &amp; courses that have shaped my technical journey</p>
-      </div>
+        <div className="section-header">
+          <h2 className="gradient-text">Certifications</h2>
+          <p>Credentials &amp; courses shaping my technical journey</p>
+        </div>
 
-      <div className="certs-grid">
-        {certifications.map((cert, index) => {
-          const hasLink = cert.credentialUrl && cert.credentialUrl !== "#";
-          return (
-            <div
-              className="cert-card glass"
-              key={index}
+        <div className="multi-stack-grid">
+          {stackedCerts.map((stack) => (
+            <div 
+              className={`cert-stack-column ${stack.theme}`} 
+              key={stack.id}
+              onClick={() => setSelectedStack(stack)}
             >
-              {/* Top accent bar */}
-              <div className="cert-accent-bar" />
-
-              <div className="cert-card-body">
-                {/* Issuer Logo */}
-                <div className="cert-logo-wrap">
-                  <img
-                    src={cert.logo}
-                    alt={cert.issuer}
-                    className="cert-logo"
-                  />
-                </div>
-
-                {/* Badge icon */}
-                <div className="cert-badge-icon">
-                  <Award size={20} />
-                </div>
-
-                <h3 className="cert-title">{cert.title}</h3>
-
-                <p className="cert-issuer">{cert.issuer}</p>
-
-                <div className="cert-date">
-                  <CalendarDays size={14} />
-                  <span>{cert.date}</span>
-                </div>
+              <div className="stack-header">
+                <h3>{stack.category}</h3>
+                <span className="view-all-text">View Stack <ChevronRight size={16} /></span>
               </div>
+              
+              <div className="cert-stack-container">
+                {stack.certs.map((cert, index) => (
+                  <div className="stack-card glass-high-end" key={index}>
+                    <div className="stack-card-inner">
+                      <div className="verified-badge">
+                        <Verified size={16} /> Verified
+                      </div>
 
-              <div className="cert-card-footer">
-                {hasLink ? (
-                  <button
-                    onClick={() => setSelectedCert(cert)}
-                    className="btn btn-primary btn-sm cert-btn"
-                  >
-                    <ExternalLink size={14} /> View Certificate
-                  </button>
-                ) : (
-                  <span className="cert-btn-unavailable">
-                    Certificate not linked
-                  </span>
-                )}
+                      {/* Issuer Logo */}
+                      <div className="cert-logo-wrap">
+                        <img src={cert.logo} alt={cert.issuer} className="cert-logo" />
+                      </div>
+
+                      <h3 className="cert-title">{cert.title}</h3>
+                      <p className="cert-issuer">{cert.issuer}</p>
+
+                      <div className="cert-date">
+                        <CalendarDays size={14} />
+                        <span>{cert.date}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
-    </div>
 
-      {/* Certificate Modal */}
-      {selectedCert && (
-        <div 
-          className="cert-modal-overlay" 
-          onClick={() => setSelectedCert(null)}
-        >
-          <div 
-            className="cert-modal-content" 
-            onClick={(e) => e.stopPropagation()}
+      {/* Modal Overlay / Full Teaser List */}
+      {selectedStack && (
+        <div className="cert-modal-overlay" onClick={() => setSelectedStack(null)}>
+          <button className="global-modal-close" onClick={() => setSelectedStack(null)}>
+            <X size={32} />
+          </button>
+
+          <div className="cert-modal-scroll-area" onClick={(e) => e.stopPropagation()}>
+            <div className="cert-modal-content">
+              <h2 className="modal-stack-title text-gradient">{selectedStack.category} Credentials</h2>
+              <div className="modal-gallery-grid">
+                {selectedStack.certs.map((cert, idx) => {
+                  const hasLink = cert.credentialUrl && cert.credentialUrl !== "#";
+                  return (
+                    <div key={idx} className="modal-gallery-item glass-high-end">
+                      <img src={cert.credentialUrl} alt={cert.title} className="modal-cert-image" />
+                      <div className="modal-cert-info">
+                        <h4>{cert.title}</h4>
+                        <p>{cert.issuer} • {cert.date}</p>
+                        {hasLink && (
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFullscreenImage(cert);
+                            }} 
+                            className="btn btn-outline btn-sm"
+                          >
+                            <ExternalLink size={14} /> View Certificate
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Fullscreen Canvas Modal for Individual Certificate */}
+      {fullscreenImage && (
+        <div className="fullscreen-canvas-overlay" onClick={() => setFullscreenImage(null)}>
+          <button 
+            className="global-modal-close global-modal-close-canvas" 
+            onClick={() => setFullscreenImage(null)}
           >
-            <button 
-              className="cert-modal-close" 
-              onClick={() => setSelectedCert(null)}
-            >
-              <X size={32} />
-            </button>
-            <img 
-              src={selectedCert.credentialUrl} 
-              alt={selectedCert.title} 
-              className="cert-modal-image"
-            />
-            <div className="cert-modal-info">
-              <h3>{selectedCert.title}</h3>
-              <p>{selectedCert.issuer} • {selectedCert.date}</p>
+            <X size={32} />
+          </button>
+
+          <div className="cert-modal-scroll-area" onClick={(e) => e.stopPropagation()}>
+            <div className="fullscreen-canvas-content">
+              <img 
+                src={fullscreenImage.credentialUrl} 
+                alt={fullscreenImage.title} 
+                className="canvas-image" 
+              />
+              <div className="canvas-details">
+                <h3>{fullscreenImage.title}</h3>
+                <p>{fullscreenImage.issuer}</p>
+              </div>
             </div>
           </div>
         </div>

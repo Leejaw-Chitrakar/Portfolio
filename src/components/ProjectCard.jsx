@@ -1,5 +1,5 @@
 import React from "react";
-import { ExternalLink, Github, WifiOff } from "lucide-react";
+import { Github } from "lucide-react";
 import "../styles/ProjectCard.css";
 
 const ProjectCard = ({
@@ -9,91 +9,45 @@ const ProjectCard = ({
   image,
   liveUrl,
   githubUrl,
+  index
 }) => {
   const hasDemo = liveUrl && liveUrl !== "#";
+  // Alternate heights to create a prominent staggered masonry effect
+  const cardHeightClass = index % 3 === 0 ? "h-tall" : index % 3 === 1 ? "h-medium" : "h-short";
 
   return (
-    <div className="project-card glass">
-      <div className="project-image-container">
-        <img src={image} alt={title} className="project-image" />
+    <div className={`fusion-card ${cardHeightClass}`}>
+      <img src={image} alt={title} className="fusion-card-image" />
+      
+      <div className="fusion-card-glass">
+        {/* Default state: Only faint, elegant category labels */}
+        <div className="fusion-card-default">
+          <span className="fusion-category">{tech[0]}</span>
+        </div>
 
-        {/* Demo Unavailable Badge */}
-        {!hasDemo && (
-          <div className="demo-unavailable-badge">
-            <WifiOff size={13} />
-            <span>Live Unavailable</span>
+        {/* Hover state content */}
+        <div className="fusion-card-hover">
+          <h3 className="fusion-title">{title}</h3>
+          <p className="fusion-desc">{description}</p>
+          
+          <div className="fusion-tech-stack">
+            {tech.slice(0, 3).map((item, i) => (
+              <span key={i} className="fusion-tech-tag">{item}</span>
+            ))}
           </div>
-        )}
 
-        <div className="project-overlay">
-          <div className="overlay-links">
+          <div className="fusion-actions">
             {hasDemo ? (
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="overlay-btn"
-                aria-label="Live Demo"
-              >
-                <ExternalLink size={24} />
+              <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="fusion-btn discover-btn">
+                Discover
               </a>
             ) : (
-              <span
-                className="overlay-btn overlay-btn--disabled"
-                aria-label="Demo Unavailable"
-              >
-                <WifiOff size={24} />
-              </span>
+              <span className="fusion-btn disabled-btn">Unavailable</span>
             )}
-            <a
-              href={githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="overlay-btn"
-              aria-label="GitHub Source"
-            >
-              <Github size={24} />
+            <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="fusion-btn outline-btn">
+              <Github size={16} /> Code
             </a>
           </div>
-        </div>
-      </div>
-
-      <div className="project-info">
-        <h3 className="project-title">{title}</h3>
-        <p className="project-desc">{description}</p>
-        <div className="project-tech">
-          {tech.map((item, index) => (
-            <span key={index} className="tech-tag">
-              {item}
-            </span>
-          ))}
-        </div>
-        <div className="project-actions">
-          {hasDemo ? (
-            <a
-              href={liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-primary btn-sm"
-            >
-              <ExternalLink size={15} /> Live
-            </a>
-          ) : (
-            <span
-              className="btn btn-sm btn-demo-disabled"
-              title="No live demo available"
-            >
-              <WifiOff size={15} /> Live Unavailable
-            </span>
-          )}
-          <a
-            href={githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-outline btn-sm"
-          >
-            <Github size={16} /> Code
-          </a>
         </div>
       </div>
     </div>

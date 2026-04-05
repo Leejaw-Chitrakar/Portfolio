@@ -1,30 +1,75 @@
-.projects-page {
-  flex: 1;
+/* Projects.css */
+.fusion-container {
+  position: relative;
+  min-height: 100vh;
+  /* Deep, moody radial gradient */
+  background: radial-gradient(circle at 50% 0%, #1a202c, #0f172a 70%);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-.section-header {
-  text-align: center;
-  margin-bottom: 4rem;
+.fusion-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.section-header p {
-  color: var(--text-muted);
+.light-leak-1 {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 60%);
+  filter: blur(80px);
+}
+
+.light-leak-2 {
+  position: absolute;
+  bottom: -20%;
+  right: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 60%);
+  filter: blur(100px);
+}
+
+.section-header, .fusion-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.fusion-subtitle {
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  font-family: 'Inter', sans-serif;
   margin-top: 1rem;
-  font-size: 1.1rem;
 }
 
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2.5rem;
+/* Masonry Layout */
+.fusion-grid {
+  columns: 3 320px;
+  column-gap: 2rem;
   margin-bottom: 4rem;
 }
 
-@media (max-width: 480px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+.fusion-grid > * {
+  break-inside: avoid;
+  margin-bottom: 2rem;
+  display: block; /* Ensure columns work well with cards */
+}
+
+@media (max-width: 1024px) {
+  .fusion-grid {
+    columns: 2 320px;
+  }
+}
+
+@media (max-width: 640px) {
+  .fusion-grid {
+    columns: 1 100%;
   }
 }

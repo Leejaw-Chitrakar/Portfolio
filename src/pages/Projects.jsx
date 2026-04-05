@@ -59,19 +59,44 @@ const Projects = () => {
       liveUrl: "#",
       githubUrl: "https://github.com/Leejaw-Chitrakar/Hangman",
     },
+    {
+      title: "LC Pixel Art",
+      description:
+        "A creative web-based pixel art drawing application, allowing users to paint, design, and export pixel-perfect artworks directly from their browser.",
+      tech: ["React", "Vite", "CSS"],
+      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=665&auto=format&fit=crop",
+      liveUrl: "https://lc-pixel-art.web.app/",
+      githubUrl: "https://github.com/Leejaw-Chitrakar/pixel-art",
+    },
+    {
+      title: "Student Management System",
+      description:
+        "A robust third-semester React project designed for tracking, managing, and organizing student records and institutional data seamlessly.",
+      tech: ["React", "Vite", "Firebase"],
+      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=665&auto=format&fit=crop",
+      liveUrl: "https://lc-studentmanagementsys.web.app/",
+      githubUrl: "https://github.com/Leejaw-Chitrakar",
+    },
   ];
 
   return (
-    <div className="projects-page container section fade-in">
-      <div className="section-header">
-        <h2 className="gradient-text">Featured Projects</h2>
-        <p>A collection of my real-world work and personal experiments</p>
+    <div className="projects-page fusion-container fade-in">
+      <div className="fusion-background">
+        <div className="light-leak-1"></div>
+        <div className="light-leak-2"></div>
       </div>
+      
+      <div className="container section">
+        <div className="section-header">
+          <h2 className="gradient-text">Featured Projects</h2>
+          <p className="fusion-subtitle">A collection of my real-world work and personal experiments</p>
+        </div>
 
-      <div className="projects-grid">
-        {projectList.map((project, index) => (
-          <ProjectCard key={index} {...project} />
-        ))}
+        <div className="fusion-grid">
+          {projectList.map((project, index) => (
+            <ProjectCard key={index} {...project} index={index} />
+          ))}
+        </div>
       </div>
     </div>
   );

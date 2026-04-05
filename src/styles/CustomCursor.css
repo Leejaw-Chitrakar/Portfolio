@@ -1,7 +1,5 @@
-/* Hide the default cursor for most elements to improve effect */
-body, a, button {
-  cursor: none !important;
-}
+/* We previously hid the default cursor here, but now it is restored 
+   Default cursor is now visible site-wide */
 
 /* Inner Dot currently tracking exact mouse position */
 .custom-cursor-inner {
