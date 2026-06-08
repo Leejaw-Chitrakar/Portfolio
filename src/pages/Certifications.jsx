@@ -25,7 +25,7 @@ const certifications = [
     logo: "https://i.postimg.cc/cCXqnwmY/Hult-Logo.png",
   },
   {
-    title: "Certificate of Appreciation – Lakshayrambh",
+    title: "Certificate of Appreciation – Lakshayrambha",
     issuer: "CSIT Association of Nepal",
     date: "June 2025",
     credentialUrl: "https://i.postimg.cc/0jjHM3HG/Lakshyaarambha.png",
@@ -43,7 +43,7 @@ const certifications = [
     issuer: "Red Hat Academy",
     date: "March 2025",
     credentialUrl: "https://i.postimg.cc/qRj570Q2/Redhat.jpg",
-    logo: "https://i.postimg.cc/Xvcsq3xN/Red-Hat.pngng",
+    logo: "https://i.postimg.cc/Xvcsq3xN/Red-Hat.png",
   },
   {
     title: "AI and Prompt Engineering",

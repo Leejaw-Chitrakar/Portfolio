@@ -12,6 +12,7 @@ const ProjectCard = ({
   index
 }) => {
   const hasDemo = liveUrl && liveUrl !== "#";
+  const hasGithub = githubUrl && githubUrl !== "#";
   // Alternate heights to create a prominent staggered masonry effect
   const cardHeightClass = index % 3 === 0 ? "h-tall" : index % 3 === 1 ? "h-medium" : "h-short";
 
@@ -44,9 +45,11 @@ const ProjectCard = ({
             ) : (
               <span className="fusion-btn disabled-btn">Unavailable</span>
             )}
-            <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="fusion-btn outline-btn">
-              <Github size={16} /> Code
-            </a>
+            {hasGithub && (
+              <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="fusion-btn outline-btn">
+                <Github size={16} /> Code
+              </a>
+            )}
           </div>
         </div>
       </div>

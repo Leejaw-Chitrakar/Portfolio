@@ -66,11 +66,11 @@ const Contact = () => {
         {
           from_name: formData.name,
           from_email: formData.email,
-          phone: formData.phone || 'Not provided',
+          phone: formData.phone || "Not provided",
           message: formData.message,
-          to_name: 'UNKNOWN', // Optional: customize recipient name
+          to_name: "Leejaw", // Optional: customize recipient name
         },
-        PUBLIC_KEY
+        PUBLIC_KEY,
       );
 
       setStatus('success');
@@ -226,23 +226,7 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* <div className="hours-card glass">
-            <h3 className="sidebar-title small"><Clock size={18} /> Office Hours</h3>
-            <div className="hours-list">
-              <div className="hour-row">
-                <span>Mon - Fri:</span>
-                <span>9:00 AM - 6:00 PM</span>
-              </div>
-              <div className="hour-row">
-                <span>Sat:</span>
-                <span>10:00 AM - 2:00 PM</span>
-              </div>
-              <div className="hour-row">
-                <span>Sun:</span>
-                <span className="closed">Closed</span>
-              </div>
-            </div>
-          </div> */}
+
         </div>
       </div>
     </div>

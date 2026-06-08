@@ -107,7 +107,7 @@ const About = () => {
             </div>
             <div className="contact-info-item">
               <Phone size={16} color="var(--secondary)" />
-              <span>9841996363</span>
+              <span>+977 9841996363</span>
             </div>
             <div className="contact-info-item">
               <MapPin size={16} color="var(--accent)" />

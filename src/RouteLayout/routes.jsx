@@ -7,6 +7,7 @@ import Skills from "../pages/Skills.jsx";
 import Contact from "../pages/Contact.jsx";
 import Resume from "../pages/Resume.jsx";
 import Certifications from "../pages/Certifications.jsx";
+import NotFound from "../pages/NotFound.jsx";
 
 const AppRoutes = () => {
     return (
@@ -18,6 +19,7 @@ const AppRoutes = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/resume" element={<Resume />} />
             <Route path="/certifications" element={<Certifications />} />
+            <Route path="*" element={<NotFound />} />
         </Routes>
     );
 };

@@ -91,7 +91,7 @@ const Home = () => {
       <section className="stats-section">
         <div className="container stats-glass glass">
           <div className="stat-item">
-            <h2 className="gradient-text">4+</h2>
+            <h2 className="gradient-text">8+</h2>
             <p>Projects Built</p>
           </div>
           <div className="stat-line"></div>

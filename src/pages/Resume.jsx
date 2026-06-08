@@ -1,5 +1,5 @@
 import React from "react";
-import { GraduationCap, Award, Code2, ExternalLink } from "lucide-react";
+import { GraduationCap, Award, Code2, ExternalLink, Download } from "lucide-react";
 import "../styles/Resume.css";
 
 const Resume = () => {
@@ -8,6 +8,14 @@ const Resume = () => {
       <div className="section-header">
         <h2 className="gradient-text">My Resume</h2>
         <p>Professional summary and technical background</p>
+        <a
+          href="/LeejawChitrakar_Resume.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-primary"
+        >
+          <Download size={18} /> Download PDF
+        </a>
       </div>
 
       <div className="resume-content glass">
@@ -15,11 +23,11 @@ const Resume = () => {
           <section className="resume-section">
             <h3>Professional Summary</h3>
             <p>
-              Highly motivated and detail-oriented Web Developer seeking to
-              leverage foundational skills in C, C++, HTML, and CSS to build
-              functional and responsive interfaces. Eager to contribute to
-              dynamic projects while expanding practical experience with
-              JavaScript and React.
+              Passionate Full-Stack Web Developer with hands-on experience building
+              production-ready MERN stack applications. Proficient in React, Node.js,
+              Express, MongoDB, and Firebase. Delivered multiple live projects including
+              e-commerce platforms and interactive web tools. Currently pursuing BSc.CSIT
+              at Tribhuvan University while actively expanding full-stack expertise.
             </p>
           </section>
 
@@ -194,13 +202,7 @@ const Resume = () => {
               <p className="exp-company">Skill Lab</p>
             </div>
 
-            <div className="experience-item">
-              <div className="exp-header">
-                <h4>Project Management (Skill Lab)</h4>
-                <span>October 2025</span>
-              </div>
-              <p className="exp-company">Skill Lab</p>
-            </div>
+
 
             <div className="experience-item">
               <div className="exp-header">
@@ -289,7 +291,7 @@ const Resume = () => {
             <h3>Contact</h3>
             <div className="edu-item">
               <p>leejaw.chitrakar10@gmail.com</p>
-              <p>9841996363</p>
+              <p>+977 9841996363</p>
               <p>Kathmandu, Nepal</p>
               <a
                 href="https://github.com/Leejaw-Chitrakar"

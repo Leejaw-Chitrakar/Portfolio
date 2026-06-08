@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import "../styles/CustomCursor.css";
 
 const CustomCursor = () => {
+  if (window.matchMedia('(pointer: coarse)').matches) return null;
+
   const canvasRef = useRef(null);
   const dotRef = useRef(null);
   const mouse = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
