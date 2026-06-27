@@ -10,7 +10,7 @@
   --text-muted: #94a3b8;
   --glass: rgba(30, 41, 59, 0.7);
   --border: rgba(255, 255, 255, 0.1);
-  --nav-height: 100px;
+  --nav-height: 80px;
   
   /* Gradients */
   --grad-primary: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);

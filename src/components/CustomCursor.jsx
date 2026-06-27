@@ -2,8 +2,10 @@ import React, { useEffect, useRef } from "react";
 import "../styles/CustomCursor.css";
 
 const CustomCursor = () => {
-  if (window.matchMedia('(pointer: coarse)').matches) return null;
+  // Evaluate touch check before any hooks — stored as a plain value, not a hook
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
 
+  // All hooks are declared unconditionally to satisfy Rules of Hooks
   const canvasRef = useRef(null);
   const dotRef = useRef(null);
   const mouse = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
@@ -11,6 +13,9 @@ const CustomCursor = () => {
   const particles = useRef([]);
 
   useEffect(() => {
+    // Guard inside the effect — no-op on touch devices
+    if (isTouchDevice) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -54,8 +59,8 @@ const CustomCursor = () => {
         const p = particles.current[i];
         p.x += p.speedX;
         p.y += p.speedY;
-        p.size += 0.8; 
-        p.opacity -= 0.008; 
+        p.size += 0.8;
+        p.opacity -= 0.008;
 
         if (p.opacity <= 0) {
           particles.current.splice(i, 1);
@@ -87,7 +92,10 @@ const CustomCursor = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [isTouchDevice]);
+
+  // Conditional render AFTER all hooks
+  if (isTouchDevice) return null;
 
   return (
     <>

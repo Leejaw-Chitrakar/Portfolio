@@ -164,8 +164,8 @@
 
 .timeline-dot {
   position: absolute;
-  left: -2.4rem;
-  top: 2.5rem;
+  left: calc(-2rem - 5px); /* Perfectly centered on the 2px vertical line */
+  top: calc(2rem + 0.75rem - 6px); /* Vertically centered with the first line of the title h4 */
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -222,7 +222,8 @@
   }
 
   .timeline-dot {
-    left: -1.9rem;
+    left: calc(-1.5rem - 5px);
+    top: calc(1.5rem + 0.75rem - 6px);
   }
 
   .sub-title {

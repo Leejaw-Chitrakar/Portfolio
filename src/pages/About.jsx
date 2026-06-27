@@ -171,6 +171,16 @@ const About = () => {
               date: "Present",
               desc: "Developed a responsive e-commerce platform using ReactJS with a focus on optimized UX and clean design across all devices.",
             },
+            {
+              title: "Chiya Jivan — Boutique Tea Café App",
+              date: "Present",
+              desc: "Designed and developed a high-fidelity, full-stack application featuring a dynamic menu, immersive social gallery, QR ordering, and a secure admin dashboard with real-time Firebase Integration.",
+            },
+            {
+              title: "LifeDrop — Blood Donation Network",
+              date: "Present",
+              desc: "Built a civic-tech blood donation platform with rapid donor registration, role-based Firebase Authentication, GSAP-powered scroll animations, and integrated Nepali date utilities.",
+            },
           ].map((item, index) => (
             <motion.div
               className="timeline-item glass"

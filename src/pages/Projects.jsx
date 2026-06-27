@@ -5,6 +5,24 @@ import "../styles/Projects.css";
 const Projects = () => {
   const projectList = [
     {
+      title: "Chiya Jivan — Tea Café App",
+      description:
+        "A full-stack boutique tea café web app for a Thamel café. Features a dynamic menu, immersive social gallery, QR-code ordering, and a protected admin dashboard with Firebase Auth & Firestore for real-time order and content management.",
+      tech: ["React JS", "Vite", "Firebase", "Firestore", "CSS3"],
+      image: "/projects/chiyajivan.png",
+      liveUrl: "http://chiyajivan.web.app/",
+      githubUrl: "https://github.com/leejaw-Chitrakar/Chiyajivan",
+    },
+    {
+      title: "LifeDrop — Blood Donation Network",
+      description:
+        "A civic-tech blood donation platform designed to instantly connect active donors with patients in urgent need. Features rapid donor registration, a real-time admin management portal with role-based Firebase Auth, GSAP scroll-triggered transitions, and integrated Nepali date conversion libraries.",
+      tech: ["React JS", "Vite", "Firebase", "Firestore", "GSAP", "CSS3"],
+      image: "/projects/lifedrop.png",
+      liveUrl: "https://lifedrop-network.web.app/",
+      githubUrl: "https://github.com/Leejaw-Chitrakar/lifedrop",
+    },
+    {
       title: "VibeCouture Fashion Store",
       description:
         "A premium MERN stack fashion e-commerce platform featuring high-end aesthetics, robust state management, and a seamless shopping experience.",
@@ -64,7 +82,8 @@ const Projects = () => {
       description:
         "A creative web-based pixel art drawing application, allowing users to paint, design, and export pixel-perfect artworks directly from their browser.",
       tech: ["React", "Vite", "CSS"],
-      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=665&auto=format&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=665&auto=format&fit=crop",
       liveUrl: "https://lc-pixel-art.web.app/",
       githubUrl: "https://github.com/Leejaw-Chitrakar/pixel-art",
     },
@@ -73,7 +92,8 @@ const Projects = () => {
       description:
         "A robust third-semester React project designed for tracking, managing, and organizing student records and institutional data seamlessly.",
       tech: ["React", "Vite", "Firebase"],
-      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=665&auto=format&fit=crop",
+      image:
+        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=665&auto=format&fit=crop",
       liveUrl: "https://lc-studentmanagementsys.web.app/",
       githubUrl: "https://github.com/Leejaw-Chitrakar",
     },
@@ -85,11 +105,13 @@ const Projects = () => {
         <div className="light-leak-1"></div>
         <div className="light-leak-2"></div>
       </div>
-      
+
       <div className="container section">
         <div className="section-header">
           <h2 className="gradient-text">Featured Projects</h2>
-          <p className="fusion-subtitle">A collection of my real-world work and personal experiments</p>
+          <p className="fusion-subtitle">
+            A collection of my real-world work and personal experiments
+          </p>
         </div>
 
         <div className="fusion-grid">
