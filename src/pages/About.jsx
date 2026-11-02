@@ -1,5 +1,5 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
 import {
   User,
   Briefcase,
@@ -8,6 +8,7 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import { subscribeCollection, defaultMilestones } from "../services/portfolioService";
 import "../styles/About.css";
 
 const AnimatedCharacter = ({ children }) => (
@@ -66,6 +67,31 @@ const TypewriterParagraph = ({ children, delay = 0 }) => {
 };
 
 const About = () => {
+  const timelineRef = useRef(null);
+  const [milestones, setMilestones] = useState(defaultMilestones);
+
+  useEffect(() => {
+    const unsub = subscribeCollection("milestones", (data) => {
+      if (data && data.length > 0) {
+        setMilestones(data);
+      } else {
+        setMilestones(defaultMilestones);
+      }
+    }, defaultMilestones);
+    return () => unsub();
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start 75%", "end 70%"],
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   return (
     <div className="about-page container section fade-in">
       <div className="section-header">
@@ -149,46 +175,16 @@ const About = () => {
         >
           Journey So Far
         </motion.h3>
-        <div className="timeline">
-          {[
-            {
-              title: "Interactive Games — Quiz & Hangman",
-              date: "Discovery Phase",
-              desc: "Created interactive browser games showcasing core JavaScript logic, programming concepts, and user engagement.",
-            },
-            {
-              title: "BSc.CSIT — Tribhuvan University",
-              date: "2024",
-              desc: "Started Bachelor of Science in Computer Science and Information Technology at Kathmandu, Ason Ward 25, Bagmati Province.",
-            },
-            {
-              title: "MERN Stack E-Commerce Project",
-              date: "Present",
-              desc: "Built a fully functional MERN stack commerce site supporting local businesses, with secure user authentication and robust state management.",
-            },
-            {
-              title: "Kaaputale E-Commerce Site",
-              date: "Present",
-              desc: "Developed a responsive e-commerce platform using ReactJS with a focus on optimized UX and clean design across all devices.",
-            },
-            {
-              title: "Chiya Jivan — Boutique Tea Café App",
-              date: "Present",
-              desc: "Designed and developed a high-fidelity, full-stack application featuring a dynamic menu, immersive social gallery, QR ordering, and a secure admin dashboard with real-time Firebase Integration.",
-            },
-            {
-              title: "LifeDrop — Blood Donation Network",
-              date: "Present",
-              desc: "Built a civic-tech blood donation platform with rapid donor registration, role-based Firebase Authentication, GSAP-powered scroll animations, and integrated Nepali date utilities.",
-            },
-          ].map((item, index) => (
+        <div className="timeline" ref={timelineRef}>
+          <motion.div className="timeline-progress-bar" style={{ scaleY }} />
+          {milestones.map((item, index) => (
             <motion.div
               className="timeline-item glass"
-              key={index}
+              key={item.id || index}
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: 0.08 }}
             >
               <div className="timeline-dot"></div>
               <div className="timeline-content">

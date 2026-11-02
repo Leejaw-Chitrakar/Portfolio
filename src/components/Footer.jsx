@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Github,
   Linkedin,
@@ -6,6 +7,7 @@ import {
   Mail,
   Heart,
   Instagram,
+  Lock,
 } from "lucide-react";
 import "../styles/Footer.css";
 

@@ -1,12 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ArrowRight, Terminal, Sparkles, Zap, Layers } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Terminal, Sparkles, Zap, Layers, CalendarDays, MapPin, Users } from 'lucide-react';
+import { subscribeCollection, defaultEvents } from '../services/portfolioService';
 import '../styles/Home.css';
 
 const Home = () => {
   const [text, setText] = useState('');
   const fullText = "Full-Stack Web Developer";
   const [index, setIndex] = useState(0);
+  const [events, setEvents] = useState(defaultEvents);
+
+  useEffect(() => {
+    const unsubscribe = subscribeCollection("events", (data) => {
+      if (data && data.length > 0) {
+        setEvents(data);
+      }
+    }, defaultEvents);
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (index < fullText.length) {
@@ -104,6 +117,54 @@ const Home = () => {
             <h2 className="gradient-text">2024</h2>
             <p>BSc.CSIT Started</p>
           </div>
+        </div>
+      </section>
+
+      {/* Events Section */}
+      <section className="events-section container">
+        <motion.div
+          className="events-header"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="gradient-text">Events I've Been Around</h2>
+          <p>Workshops, industry visits, and community initiatives I've participated in or facilitated.</p>
+        </motion.div>
+
+        <div className="events-grid">
+          {events.map((event, i) => (
+            <motion.div
+              className="event-card glass"
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+            >
+              <div className="event-card-top">
+                <span className={`event-tag tag-${event.tagColor}`}>{event.tag}</span>
+                <span className="event-role">{event.role}</span>
+              </div>
+              <h3 className="event-title">{event.title}</h3>
+              <p className="event-desc">{event.desc}</p>
+              <div className="event-meta">
+                <div className="event-meta-item">
+                  <CalendarDays size={14} />
+                  <span>{event.date}</span>
+                </div>
+                <div className="event-meta-item">
+                  <MapPin size={14} />
+                  <span>{event.venue}</span>
+                </div>
+                <div className="event-meta-item">
+                  <Users size={14} />
+                  <span>{event.attendees}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
     </div>

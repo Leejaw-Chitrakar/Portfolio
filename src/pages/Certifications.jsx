@@ -1,77 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Award, ExternalLink, CalendarDays, X, Verified } from "lucide-react";
+import { subscribeCollection, defaultCertifications } from "../services/portfolioService";
 import "../styles/Certifications.css";
-
-const certifications = [
-  {
-    title: "Web Development Bootcamp",
-    issuer: "Samriddhi IT Club",
-    date: "July 2025",
-    credentialUrl: "https://i.postimg.cc/LXNbsRvP/Bootcamp.png",
-    logo: "https://i.postimg.cc/T2QBQjVT/Samriddhi-Logo.png",
-  },
-  {
-    title: "Hult Prize Participation",
-    issuer: "Hult Prize Foundation",
-    date: "Feb 2025",
-    credentialUrl: "https://i.postimg.cc/j5ZFjKvw/Hult_Participation.png",
-    logo: "https://i.postimg.cc/cCXqnwmY/Hult-Logo.png",
-  },
-  {
-    title: "Web & Tech Team - Hult Prize",
-    issuer: "Hult Prize Samriddhi",
-    date: "Feb 2026",
-    credentialUrl: "https://i.postimg.cc/1XXYnTYV/Hult_Web_Tech.png",
-    logo: "https://i.postimg.cc/cCXqnwmY/Hult-Logo.png",
-  },
-  {
-    title: "Certificate of Appreciation – Lakshayrambha",
-    issuer: "CSIT Association of Nepal",
-    date: "June 2025",
-    credentialUrl: "https://i.postimg.cc/0jjHM3HG/Lakshyaarambha.png",
-    logo: "https://i.postimg.cc/pL0NTfTM/CSITAN.png",
-  },
-  {
-    title: "Project Management Certificate",
-    issuer: "Skill Lab",
-    date: "Oct 2025",
-    credentialUrl: "https://i.postimg.cc/qqqZhYZh/Project_Management.jpg",
-    logo: "https://i.postimg.cc/3wMqWtTZ/SKill-Lab.png",
-  },
-  {
-    title: "Linux Fundamentals (RH104)",
-    issuer: "Red Hat Academy",
-    date: "March 2025",
-    credentialUrl: "https://i.postimg.cc/qRj570Q2/Redhat.jpg",
-    logo: "https://i.postimg.cc/Xvcsq3xN/Red-Hat.png",
-  },
-  {
-    title: "AI and Prompt Engineering",
-    issuer: "Skill Lab",
-    date: "Dec 2025",
-    credentialUrl: "https://i.postimg.cc/yxMG63rg/AI-Prompting.png",
-    logo: "https://i.postimg.cc/3wMqWtTZ/SKill-Lab.png",
-  },
-  {
-    title: "Leadership Basic Course",
-    issuer: "Skill Lab",
-    date: "Dec 2025",
-    credentialUrl: "https://i.postimg.cc/1XnTZrM9/Leadership-Basic.png",
-    logo: "https://i.postimg.cc/3wMqWtTZ/SKill-Lab.png",
-  },
-  {
-    title: "Portfolio Website Essentials",
-    issuer: "CSIT Association of Nepal",
-    date: "2026",
-    credentialUrl: "https://i.postimg.cc/s22M8y1m/portfolio-website-essentials-2026.png",
-    logo: "https://i.postimg.cc/pL0NTfTM/CSITAN.png",
-  },
-];
 
 const themes = ["theme-blue", "theme-purple", "theme-emerald"];
 
 const Certifications = () => {
+  const [certs, setCerts] = useState(defaultCertifications);
   const [fullscreenImage, setFullscreenImage] = useState(null);
+
+  useEffect(() => {
+    const unsub = subscribeCollection("certifications", (data) => {
+      if (data && data.length > 0) {
+        setCerts(data);
+      } else {
+        setCerts(defaultCertifications);
+      }
+    }, defaultCertifications);
+    return () => unsub();
+  }, []);
 
   // Close modal on ESC key
   useEffect(() => {
@@ -105,12 +52,12 @@ const Certifications = () => {
 
         <div className="certifications-content">
           <div className="cert-grid">
-            {certifications.map((cert, index) => {
+            {certs.map((cert, index) => {
               const themeClass = themes[index % 3];
               return (
                 <div 
                   className={`cert-card glass-high-end ${themeClass}`} 
-                  key={index}
+                  key={cert.id || index}
                   onClick={() => {
                     if (cert.credentialUrl && cert.credentialUrl !== "#") {
                       setFullscreenImage(cert);

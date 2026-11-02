@@ -1,103 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ProjectCard from "../components/ProjectCard";
+import { subscribeCollection, defaultProjects } from "../services/portfolioService";
 import "../styles/Projects.css";
 
 const Projects = () => {
-  const projectList = [
-    {
-      title: "Chiya Jivan — Tea Café App",
-      description:
-        "A full-stack boutique tea café web app for a Thamel café. Features a dynamic menu, immersive social gallery, QR-code ordering, and a protected admin dashboard with Firebase Auth & Firestore for real-time order and content management.",
-      tech: ["React JS", "Vite", "Firebase", "Firestore", "CSS3"],
-      image: "/projects/chiyajivan.png",
-      liveUrl: "http://chiyajivan.web.app/",
-      githubUrl: "https://github.com/leejaw-Chitrakar/Chiyajivan",
-    },
-    {
-      title: "LifeDrop — Blood Donation Network",
-      description:
-        "A civic-tech blood donation platform designed to instantly connect active donors with patients in urgent need. Features rapid donor registration, a real-time admin management portal with role-based Firebase Auth, GSAP scroll-triggered transitions, and integrated Nepali date conversion libraries.",
-      tech: ["React JS", "Vite", "Firebase", "Firestore", "GSAP", "CSS3"],
-      image: "/projects/lifedrop.png",
-      liveUrl: "https://lifedrop-network.web.app/",
-      githubUrl: "https://github.com/Leejaw-Chitrakar/lifedrop",
-    },
-    {
-      title: "VibeCouture Fashion Store",
-      description:
-        "A premium MERN stack fashion e-commerce platform featuring high-end aesthetics, robust state management, and a seamless shopping experience.",
-      tech: ["MongoDB", "Express.js", "React", "Node.js", "Firebase"],
-      image: "/projects/vibecouture.png",
-      liveUrl: "https://vibecouture.web.app",
-      githubUrl: "https://github.com/Leejaw-Chitrakar/VibeCouture",
-    },
-    {
-      title: "Kaaputale E-Commerce Site",
-      description:
-        "An e-commerce platform with a focus on delivering optimized user experience (UX) and a clean, responsive design across mobile, tablet, and desktop.",
-      tech: ["ReactJS", "CSS3", "Responsive Design"],
-      image: "https://i.postimg.cc/htsg4YZd/IMG-20260207-WA0000.jpg",
-      liveUrl: "https://kaaputale.web.app",
-      githubUrl: "https://github.com/Leejaw-Chitrakar/Kaaputale",
-    },
-    {
-      title: "Quiz Game",
-      description:
-        "An interactive browser-based quiz game showcasing dynamic JavaScript logic, DOM manipulation, and engaging user interaction flows.",
-      tech: ["HTML", "CSS", "JavaScript"],
-      image: "https://i.postimg.cc/rwPn9CKY/quiz_Game.png",
-      liveUrl: "https://leejaw-chitrakar.github.io/Quiz-Game/",
-      githubUrl: "https://github.com/Leejaw-Chitrakar/Quiz-Game",
-    },
-    {
-      title: "Snake Game",
-      description:
-        "A modern, high-performance implementation of the classic Snake game featuring smooth animations, responsive controls, and a sleek, minimalist UI.",
-      tech: ["HTML", "CSS", "JavaScript", "Animation"],
-      image: "/projects/snake-game.png",
-      liveUrl: "https://leejaw-chitrakar.github.io/Snake-Game/",
-      githubUrl: "https://github.com/Leejaw-Chitrakar/Snake-Game",
-    },
-    {
-      title: "Hult Prize at Samriddhi",
-      description:
-        "An official web platform for Hult Prize at Samriddhi College — empowering students to tackle the world's pressing social challenges through entrepreneurship and innovation.",
-      tech: ["React", "Firebase", "CSS3", "Responsive Design"],
-      image: "/projects/hultprize.png",
-      liveUrl: "https://hultprizeatsamriddhi.web.app/",
-      githubUrl: "#",
-    },
-    {
-      title: "Hangman Game",
-      description:
-        "A classic Hangman game built in C, demonstrating core programming concepts such as arrays, loops, string handling, and game logic implementation in a console environment.",
-      tech: ["C", "Console Application"],
-      image:
-        "https://images.unsplash.com/photo-1753285310764-54c9571eff70?q=80&w=665&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      liveUrl: "#",
-      githubUrl: "https://github.com/Leejaw-Chitrakar/Hangman",
-    },
-    {
-      title: "LC Pixel Art",
-      description:
-        "A creative web-based pixel art drawing application, allowing users to paint, design, and export pixel-perfect artworks directly from their browser.",
-      tech: ["React", "Vite", "CSS"],
-      image:
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=665&auto=format&fit=crop",
-      liveUrl: "https://lc-pixel-art.web.app/",
-      githubUrl: "https://github.com/Leejaw-Chitrakar/pixel-art",
-    },
-    {
-      title: "Student Management System",
-      description:
-        "A robust third-semester React project designed for tracking, managing, and organizing student records and institutional data seamlessly.",
-      tech: ["React", "Vite", "Firebase"],
-      image:
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=665&auto=format&fit=crop",
-      liveUrl: "https://lc-studentmanagementsys.web.app/",
-      githubUrl: "https://github.com/Leejaw-Chitrakar",
-    },
-  ];
+  const [projects, setProjects] = useState(defaultProjects);
+
+  useEffect(() => {
+    const unsubscribe = subscribeCollection("projects", (data) => {
+      if (data && data.length > 0) {
+        setProjects(data);
+      }
+    }, defaultProjects);
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="projects-page fusion-container fade-in">
@@ -115,9 +32,20 @@ const Projects = () => {
         </div>
 
         <div className="fusion-grid">
-          {projectList.map((project, index) => (
-            <ProjectCard key={index} {...project} index={index} />
-          ))}
+          {projects.map((project, index) => {
+            const formattedTech = Array.isArray(project.tech) 
+              ? project.tech 
+              : (typeof project.tech === "string" ? project.tech.split(",").map(t => t.trim()) : []);
+
+            return (
+              <ProjectCard 
+                key={project.id || index} 
+                {...project} 
+                tech={formattedTech}
+                index={index} 
+              />
+            );
+          })}
         </div>
       </div>
     </div>

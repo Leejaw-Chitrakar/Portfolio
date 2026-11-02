@@ -10,6 +10,7 @@ const Resume = () => {
         <p>Professional summary and technical background</p>
         <a
           href="/LeejawChitrakar_Resume.pdf"
+          download="LeejawChitrakar_Resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className="btn btn-primary"
@@ -253,6 +254,19 @@ const Resume = () => {
                   View Certificate ↗
                 </a>
               </p> */}
+            </div>
+
+            <div className="experience-item">
+              <div className="exp-header">
+                <h4>Portfolio Website Essentials</h4>
+                <span>2026</span>
+              </div>
+              <p className="exp-company">CSIT Association of Nepal</p>
+              <ul>
+                <li>
+                  Active participation in the virtual workshop focusing on personal branding, digital presence, and portfolio development.
+                </li>
+              </ul>
             </div>
           </section>
         </div>

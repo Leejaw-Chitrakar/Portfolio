@@ -7,27 +7,50 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependencies
+node_modules/
+
+# Production build output
+dist/
+dist-ssr/
 *.local
+
+# Environment & Sensitive configs
+.env
+.env.*
+!.env.example
+
+# Firebase cache, debug & emulators
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
 
-Leejaw_Chitrakar_CV.pdf
+# Temporary files & caches
+.eslintcache
+*.tsbuildinfo
+.vite/
+.turbo/
+
+# Personal resumes/documents (if you prefer them untracked)
+Leejaw_Chitrakar_resume.pdf

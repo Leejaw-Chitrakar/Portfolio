@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Check if the user is authenticated and matches your admin email
+    function isAdmin() {
+      return request.auth != null && 
+        request.auth.token.email.lower() == "leejaw.chitrakar10@gmail.com";
+    }
+
+    // ── Projects ──
+    match /projects/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Events ──
+    match /events/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Milestones ──
+    match /milestones/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Certifications ──
+    match /certifications/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Default deny for everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
