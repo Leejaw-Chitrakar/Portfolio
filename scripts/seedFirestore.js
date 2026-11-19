@@ -206,6 +206,10 @@ const events = [
     tag: "Workshop",
     tagColor: "primary",
     desc: "Introduced AI fundamentals and prompt engineering basics to secondary school students under the theme 'Explore • Prompt • Think', helping them think critically about how AI shapes everyday life.",
+    polaroidNote: "Inspiring Grade 8 minds on AI & Prompting! 💡",
+    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=AI+Literacy+Workshop",
+    rotation: "-rotate-2",
     order: 1
   },
   {
@@ -219,6 +223,10 @@ const events = [
     tag: "Workshop",
     tagColor: "primary",
     desc: "Led interactive prompt-engineering demonstrations and explored the boundary between AI assistance and human creativity while promoting safe, ethical digital habits in academic settings.",
+    polaroidNote: "Prompting live demos & human creativity! 🤖",
+    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=AI+Exploration+Session",
+    rotation: "rotate-2",
     order: 2
   },
   {
@@ -232,6 +240,10 @@ const events = [
     tag: "Workshop",
     tagColor: "secondary",
     desc: "Delivered a foundational cybersecurity awareness session under the theme 'Think • Test • Score', equipping students with threat-detection skills, password hygiene, and safe online browsing routines.",
+    polaroidNote: "Think • Test • Score — Cybersecurity 101 🛡️",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=Cybersecurity+101",
+    rotation: "-rotate-1",
     order: 3
   },
   {
@@ -245,6 +257,10 @@ const events = [
     tag: "Industry Visit",
     tagColor: "accent",
     desc: "Visited Leapfrog Technology to observe production-grade software engineering in action. Engaged in open Q&A with industry professionals and gained deeper insight into real-world development workflows and career paths.",
+    polaroidNote: "Inside Leapfrog's engineering culture 🚀",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=Leapfrog+Industry+Visit",
+    rotation: "rotate-3",
     order: 4
   },
   {
@@ -258,6 +274,10 @@ const events = [
     tag: "Volunteer",
     tagColor: "secondary",
     desc: "Contributed as part of the Web & Tech Team for the Hult Prize On-Campus Program, designing and developing the official event platform to support student teams pursuing social innovation.",
+    polaroidNote: "Designing the platform for student innovators ✨",
+    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=Hult+Prize+Samriddhi",
+    rotation: "-rotate-2",
     order: 5
   },
   {
@@ -271,6 +291,10 @@ const events = [
     tag: "Bootcamp",
     tagColor: "accent",
     desc: "Completed an intensive web development bootcamp organized by Samriddhi IT Club covering modern web technologies, hands-on projects, and industry-grade development practices.",
+    polaroidNote: "Sprint coding & building full-stack projects 💻",
+    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=Web+Dev+Bootcamp",
+    rotation: "rotate-1",
     order: 6
   }
 ];

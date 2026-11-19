@@ -1,22 +1,21 @@
-/* We previously hid the default cursor here, but now it is restored 
-   Default cursor is now visible site-wide */
+/* Default cursor is visible site-wide */
 
-/* Inner Dot currently tracking exact mouse position */
+/* Inner Dot */
 .custom-cursor-inner {
   position: fixed;
   top: 0;
   left: 0;
   pointer-events: none;
   z-index: 10000;
-  width: 6px;
-  height: 6px;
-  margin-top: -3px;
-  margin-left: -3px;
-  background-color: var(--primary, #6366f1);
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  margin-left: -4px;
+  background-color: var(--primary, #E2B4BD);
   border-radius: 50%;
   transform: translate3d(0, 0, 0);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 0 10px var(--primary, #6366f1);
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.3s ease;
+  box-shadow: 0 0 12px var(--primary, #E2B4BD);
 }
 
 /* Outer Trailing Glow / Aura */
@@ -30,12 +29,12 @@
   height: 80px;
   margin-top: -40px;
   margin-left: -40px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(99, 102, 241, 0) 70%); /* Primary color glow */
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
   border-radius: 50%;
   transform: translate3d(0, 0, 0);
   filter: blur(8px);
   transition: background 0.3s ease, filter 0.3s ease, transform 0.3s ease, width 0.3s ease, height 0.3s ease;
-  mix-blend-mode: screen; /* Works well for lighting up dark backgrounds */
+  mix-blend-mode: screen;
 }
 
 /* Hover States on interactive elements */
@@ -44,7 +43,7 @@
   height: 120px;
   margin-top: -60px;
   margin-left: -60px;
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.35) 0%, rgba(236, 72, 153, 0) 70%); /* Shifts to Secondary pink color */
+  background: radial-gradient(circle, var(--secondary, var(--primary)) 0%, transparent 70%);
   filter: blur(12px);
 }
 

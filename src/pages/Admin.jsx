@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -18,31 +19,49 @@ import {
   Trash2,
   X,
   Save,
+  Upload,
+  Loader2,
+  Check,
+  GripVertical,
+  Eye,
+  EyeOff,
+  Palette,
+  SlidersHorizontal,
+  ArrowUpDown,
 } from "lucide-react";
+import ThemeStudio from "../components/ThemeStudio.jsx";
 import { useAuth } from "../context/AuthContext";
+import { uploadToImgBB } from "../services/imageUploadService";
 import {
   subscribeCollection,
   addProject,
   updateProject,
   deleteProject,
+  reorderProjects,
   addEvent,
   updateEvent,
   deleteEvent,
+  reorderEvents,
+  toggleEventVisibility,
+  setEventsSectionSetting,
   addMilestone,
   updateMilestone,
   deleteMilestone,
+  reorderMilestones,
   addCertification,
   updateCertification,
   deleteCertification,
+  reorderCertifications,
+  parseDateString,
 } from "../services/portfolioService";
 import "../styles/Admin.css";
 
 /* ─── Blank templates ─── */
 const BLANK_PROJECT = {
-  title: "", description: "", tech: "", image: "", liveUrl: "", githubUrl: "", order: 0,
+  title: "", description: "", tech: "", image: "", liveUrl: "", githubUrl: "", date: "", order: 0,
 };
 const BLANK_EVENT = {
-  title: "", role: "", date: "", venue: "", attendees: "", tag: "", tagColor: "primary", desc: "", order: 0,
+  title: "", role: "", date: "", venue: "", attendees: "", tag: "", tagColor: "primary", desc: "", polaroidNote: "", image: "", visible: true, order: 0,
 };
 const BLANK_MILESTONE = {
   title: "", date: "", desc: "", order: 0,
@@ -52,23 +71,39 @@ const BLANK_CERTIFICATION = {
 };
 
 /* ─── Generic Modal ─── */
-const Modal = ({ title, onClose, onSave, saving, children }) => (
-  <div className="modal-overlay" onClick={onClose}>
-    <div className="modal-box glass" onClick={(e) => e.stopPropagation()}>
-      <div className="modal-header">
-        <h3>{title}</h3>
-        <button className="modal-close" onClick={onClose}><X size={20} /></button>
-      </div>
-      <div className="modal-body">{children}</div>
-      <div className="modal-footer">
-        <button className="btn btn-outline" onClick={onClose} disabled={saving}>Cancel</button>
-        <button className="btn btn-primary" onClick={onSave} disabled={saving}>
-          <Save size={16} /> {saving ? "Saving…" : "Save"}
-        </button>
+const Modal = ({ title, onClose, onSave, saving, children }) => {
+  useEffect(() => {
+    // Lock background scroll when popup is active
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  const modalContent = (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box glass" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3>{title}</h3>
+          <button className="modal-close" onClick={onClose}><X size={20} /></button>
+        </div>
+        <div className="modal-body">{children}</div>
+        <div className="modal-footer">
+          <button className="btn btn-outline" onClick={onClose} disabled={saving}>Cancel</button>
+          <button className="btn btn-primary" onClick={onSave} disabled={saving}>
+            <Save size={16} /> {saving ? "Saving…" : "Save"}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+
+  // Mount directly to document.body to break out of all parent CSS transforms & padding
+  return typeof document !== "undefined"
+    ? createPortal(modalContent, document.body)
+    : modalContent;
+};
 
 /* ─── Field helper ─── */
 const Field = ({ label, name, value, onChange, type = "text", rows }) => (
@@ -81,6 +116,129 @@ const Field = ({ label, name, value, onChange, type = "text", rows }) => (
     )}
   </div>
 );
+
+/* ─── Image Upload + URL Field ─── */
+const ImageUploadField = ({ label, name, value, onChange, onUploadSuccess, onError }) => {
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState("");
+  const [localPreview, setLocalPreview] = useState(null);
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Immediate local preview using Object URL while upload takes place
+    const objectUrl = URL.createObjectURL(file);
+    setLocalPreview(objectUrl);
+    setUploading(true);
+    setUploadProgress("Uploading to ImgBB...");
+
+    try {
+      const url = await uploadToImgBB(file);
+      onUploadSuccess(name, url);
+      setUploadProgress("Uploaded successfully!");
+      setTimeout(() => setUploadProgress(""), 3000);
+    } catch (err) {
+      if (onError) onError(err.message || "Failed to upload image.");
+      setUploadProgress("");
+      setLocalPreview(null);
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  };
+
+  const handleClearImage = () => {
+    onUploadSuccess(name, "");
+    setLocalPreview(null);
+    setUploadProgress("");
+  };
+
+  // Active display image is either the remote hosted URL or immediate local preview
+  const displayImage = localPreview || value;
+
+  return (
+    <div className="modal-field">
+      <div className="image-field-header">
+        <label>{label}</label>
+        <label className={`upload-btn-pill ${uploading ? "disabled" : ""}`}>
+          {uploading ? (
+            <>
+              <Loader2 size={13} className="spin-icon" />
+              <span>Uploading...</span>
+            </>
+          ) : (
+            <>
+              <Upload size={13} />
+              <span>Upload Image</span>
+            </>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+            disabled={uploading}
+          />
+        </label>
+      </div>
+
+      <div className="image-input-wrap">
+        <input
+          type="text"
+          name={name}
+          value={value}
+          onChange={(e) => {
+            setLocalPreview(null);
+            onChange(e);
+          }}
+          placeholder="Paste URL or click Upload Image above"
+        />
+      </div>
+
+      {/* Dedicated Uploaded Image Preview Box */}
+      {displayImage && (
+        <div className="image-live-preview-card">
+          <div className="preview-img-container">
+            <img
+              src={displayImage}
+              alt="Uploaded Preview"
+              onError={(e) => {
+                e.target.style.display = "none";
+              }}
+            />
+            {uploading && (
+              <div className="preview-uploading-overlay">
+                <Loader2 size={24} className="spin-icon" />
+                <span>Uploading to ImgBB...</span>
+              </div>
+            )}
+          </div>
+          <div className="preview-meta">
+            <div className="preview-status">
+              {uploading ? (
+                <span className="status-uploading">⏳ In Progress</span>
+              ) : uploadProgress ? (
+                <span className="status-success">✓ {uploadProgress}</span>
+              ) : (
+                <span className="status-ready">✓ Image Ready</span>
+              )}
+            </div>
+            <button
+              type="button"
+              className="preview-remove-btn"
+              onClick={handleClearImage}
+              disabled={uploading}
+              title="Remove image"
+            >
+              <Trash2 size={13} /> Remove
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 /* ═══════════════════════════════════════════════════════ ADMIN ══ */
 const Admin = () => {
@@ -100,14 +258,175 @@ const Admin = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError]   = useState("");
 
+  /* Drag-and-drop state for events */
+  const [draggedEventIndex, setDraggedEventIndex] = useState(null);
+  const [dragOverEventIndex, setDragOverEventIndex] = useState(null);
+  const [reorderingEvents, setReorderingEvents] = useState(false);
+  const [reorderSuccess, setReorderSuccess] = useState(false);
+
+  /* Section setting state */
+  const [showEventsSection, setShowEventsSection] = useState(true);
+
+  /* Sorting states */
+  const [projectSort, setProjectSort] = useState("default");
+  const [eventSort, setEventSort] = useState("default");
+  const [milestoneSort, setMilestoneSort] = useState("default");
+  const [certSort, setCertSort] = useState("default");
+  const [sortingType, setSortingType] = useState(null);
+
+  /* Sort helper function */
+  const getSortedList = (items, sortMode) => {
+    const cloned = [...items];
+    if (sortMode === "newest") {
+      return cloned.sort((a, b) => {
+        const diff = parseDateString(b) - parseDateString(a);
+        if (diff !== 0) return diff;
+        return (Number(a.order) || 0) - (Number(b.order) || 0);
+      });
+    }
+    if (sortMode === "oldest") {
+      return cloned.sort((a, b) => {
+        const diff = parseDateString(a) - parseDateString(b);
+        if (diff !== 0) return diff;
+        return (Number(a.order) || 0) - (Number(b.order) || 0);
+      });
+    }
+    if (sortMode === "title") {
+      return cloned.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+    }
+    return cloned.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+  };
+
+  /* Persist sorted order to Firestore */
+  const handleApplySortOrder = async (type, sortMode) => {
+    setSortingType(type);
+    try {
+      if (type === "project") {
+        const sorted = getSortedList(projects, sortMode);
+        setProjects(sorted);
+        await reorderProjects(sorted);
+      } else if (type === "event") {
+        const sorted = getSortedList(events, sortMode);
+        setEvents(sorted);
+        await reorderEvents(sorted);
+      } else if (type === "milestone") {
+        const sorted = getSortedList(milestones, sortMode);
+        setMilestones(sorted);
+        await reorderMilestones(sorted);
+      } else if (type === "certification") {
+        const sorted = getSortedList(certifications, sortMode);
+        setCertifications(sorted);
+        await reorderCertifications(sorted);
+      }
+      setReorderSuccess(true);
+      setTimeout(() => setReorderSuccess(false), 2500);
+    } catch (err) {
+      alert("Failed to save order to Firestore: " + err.message);
+    } finally {
+      setSortingType(null);
+    }
+  };
+
   /* Subscribe to Firestore */
   useEffect(() => {
-    const u1 = subscribeCollection("projects",       setProjects);
-    const u2 = subscribeCollection("events",         setEvents);
-    const u3 = subscribeCollection("milestones",     setMilestones);
+    const u1 = subscribeCollection("projects", setProjects);
+    const u2 = subscribeCollection("events", (data) => {
+      if (data) {
+        const settingsDoc = data.find(d => d.id === "_settings");
+        if (settingsDoc && typeof settingsDoc.showEventsSection === "boolean") {
+          setShowEventsSection(settingsDoc.showEventsSection);
+        }
+        const actualEvents = data.filter(d => d.id !== "_settings" && d.id !== "_theme");
+        setEvents(actualEvents);
+      }
+    });
+    const u3 = subscribeCollection("milestones", setMilestones);
     const u4 = subscribeCollection("certifications", setCertifications);
     return () => { u1(); u2(); u3(); u4(); };
   }, []);
+
+  /* Toggle individual event visibility */
+  const handleToggleEventVisibility = async (eventItem) => {
+    const nextVis = eventItem.visible === false ? true : false;
+    setEvents(prev => prev.map(ev => ev.id === eventItem.id ? { ...ev, visible: nextVis } : ev));
+    try {
+      if (eventItem.id) {
+        await toggleEventVisibility(eventItem.id, nextVis);
+      }
+    } catch (err) {
+      console.error("Failed to toggle event visibility:", err);
+      alert("Failed to update visibility: " + err.message);
+    }
+  };
+
+  /* Toggle whole section visibility on homepage */
+  const handleToggleSectionVisibility = async () => {
+    const nextVal = !showEventsSection;
+    setShowEventsSection(nextVal);
+    try {
+      await setEventsSectionSetting(nextVal);
+    } catch (err) {
+      console.error("Failed to toggle section setting:", err);
+      alert("Failed to update section setting: " + err.message);
+    }
+  };
+
+  /* Drag handlers for Events */
+  const handleEventDragStart = (e, index) => {
+    setDraggedEventIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", index);
+  };
+
+  const handleEventDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (dragOverEventIndex !== index) {
+      setDragOverEventIndex(index);
+    }
+  };
+
+  const handleEventDrop = async (e, targetIndex) => {
+    e.preventDefault();
+    if (draggedEventIndex === null || draggedEventIndex === targetIndex) {
+      setDraggedEventIndex(null);
+      setDragOverEventIndex(null);
+      return;
+    }
+
+    const reordered = [...events];
+    const [movedItem] = reordered.splice(draggedEventIndex, 1);
+    reordered.splice(targetIndex, 0, movedItem);
+
+    // Re-assign sequential order
+    const updatedEvents = reordered.map((item, idx) => ({
+      ...item,
+      order: idx + 1,
+    }));
+
+    // Optimistic UI update
+    setEvents(updatedEvents);
+    setDraggedEventIndex(null);
+    setDragOverEventIndex(null);
+
+    // Persist to Firestore
+    try {
+      setReorderingEvents(true);
+      await reorderEvents(updatedEvents);
+      setReorderSuccess(true);
+      setTimeout(() => setReorderSuccess(false), 2500);
+    } catch (err) {
+      console.error("Failed to reorder events in Firestore:", err);
+      alert("Failed to save new event order: " + err.message);
+    } finally {
+      setReorderingEvents(false);
+    }
+  };
+
+  const handleEventDragEnd = () => {
+    setDraggedEventIndex(null);
+    setDragOverEventIndex(null);
+  };
 
   /* Logout */
   const handleLogout = async () => {
@@ -120,7 +439,7 @@ const Admin = () => {
     const blank = type === "project" 
       ? BLANK_PROJECT 
       : type === "event" 
-      ? BLANK_EVENT 
+      ? { ...BLANK_EVENT, order: events.length + 1 } 
       : type === "milestone" 
       ? BLANK_MILESTONE 
       : BLANK_CERTIFICATION;
@@ -139,6 +458,10 @@ const Admin = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageUploaded = (fieldName, url) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: url }));
   };
 
   /* ── Save (add or update) ── */
@@ -238,6 +561,7 @@ const Admin = () => {
           { key: "events",         icon: <Calendar size={18}/>,     label: "Events" },
           { key: "milestones",     icon: <Compass size={18}/>,      label: "Milestones" },
           { key: "certifications", icon: <Award size={18}/>,        label: "Certifications" },
+          { key: "theme",          icon: <Palette size={18}/>,      label: "Theme" },
         ].map((t) => (
           <button
             key={t.key}
@@ -266,6 +590,7 @@ const Admin = () => {
               {[
                 { tab: "projects",   icon: <FolderKanban size={28} color="var(--primary)"/>,  title: "Projects Inventory",   desc: "Manage and inspect your live, prototype, and team projects." },
                 { tab: "events",     icon: <Calendar size={28} color="var(--secondary)"/>,    title: "Events & Workshops",   desc: "Review speaking engagements, facilitator roles, and visits." },
+                { tab: "theme",      icon: <Palette size={28} color="var(--primary-dark)"/>,  title: "Theme Studio",         desc: "Customize colors, card radius, typography, and presets live." },
                 { tab: "milestones", icon: <Clock size={28} color="var(--accent)"/>,          title: "Journey Timeline",     desc: "View chronological milestones featured on your About page." },
               ].map((q) => (
                 <button key={q.tab} onClick={() => setActiveTab(q.tab)} className="quick-action-card"
@@ -306,25 +631,65 @@ const Admin = () => {
             exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.3 }}
           >
             <div className="panel-section-title">
-              <h2>Portfolio Projects</h2>
-              <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
-                onClick={() => openAdd("project")}>
-                <Plus size={16} /> Add Project
-              </button>
+              <div>
+                <h2>Portfolio Projects</h2>
+                <p className="section-subtitle-hint">
+                  Manage projects, preview deployments, and organize display order.
+                </p>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+                <div className="table-sort-control">
+                  <span className="sort-label"><SlidersHorizontal size={13} /> Sort:</span>
+                  <select
+                    value={projectSort}
+                    onChange={(e) => setProjectSort(e.target.value)}
+                    className="admin-sort-select"
+                  >
+                    <option value="default">Default (Order #)</option>
+                    <option value="newest">Date (Newest First)</option>
+                    <option value="oldest">Date (Oldest First)</option>
+                    <option value="title">Title (A-Z)</option>
+                  </select>
+                  {projectSort !== "default" && (
+                    <button
+                      type="button"
+                      className="btn-apply-order"
+                      onClick={() => handleApplySortOrder("project", projectSort)}
+                      disabled={sortingType === "project"}
+                      title="Save this sorted order to Firestore so the live website displays it"
+                    >
+                      {sortingType === "project" ? <Loader2 size={12} className="spin-icon" /> : <Save size={12} />}
+                      <span>Save as Site Order</span>
+                    </button>
+                  )}
+                </div>
+
+                <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
+                  onClick={() => openAdd("project")}>
+                  <Plus size={16} /> Add Project
+                </button>
+              </div>
             </div>
             <div className="admin-table-container">
               <table className="admin-table">
                 <thead>
                   <tr>
-                    <th>#</th><th>Title</th><th>Tech</th><th>Live URL</th><th>Actions</th>
+                    <th>#</th><th>Title</th><th>Tech</th><th>Date / Timeline</th><th>Live URL</th><th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {projects.map((p, i) => (
+                  {getSortedList(projects, projectSort).map((p, i) => (
                     <tr key={p.id}>
                       <td>{p.order ?? i + 1}</td>
                       <td><strong>{p.title}</strong></td>
                       <td><code style={{ fontSize: "0.78rem" }}>{techStr(p.tech)}</code></td>
+                      <td>
+                        {p.date ? (
+                          <span className="table-badge badge-blue">{p.date}</span>
+                        ) : (
+                          <span style={{ color: "var(--text-muted)" }}>—</span>
+                        )}
+                      </td>
                       <td>
                         {p.liveUrl && p.liveUrl !== "#"
                           ? <a href={p.liveUrl} target="_blank" rel="noreferrer" style={{ color: "var(--primary)" }}>Live ↗</a>
@@ -337,7 +702,7 @@ const Admin = () => {
                     </tr>
                   ))}
                   {projects.length === 0 && (
-                    <tr><td colSpan={5} style={{ textAlign: "center", color: "var(--text-muted)", padding: "2rem" }}>No projects yet — click Add Project.</td></tr>
+                    <tr><td colSpan={6} style={{ textAlign: "center", color: "var(--text-muted)", padding: "2rem" }}>No projects yet — click Add Project.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -352,33 +717,142 @@ const Admin = () => {
             exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.3 }}
           >
             <div className="panel-section-title">
-              <h2>Events &amp; Facilitation</h2>
-              <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
-                onClick={() => openAdd("event")}>
-                <Plus size={16} /> Add Event
-              </button>
+              <div>
+                <h2>Events &amp; Facilitation</h2>
+                <p className="section-subtitle-hint">
+                  <GripVertical size={14} /> Drag rows using the handle icon to set and save the order.
+                </p>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+                {/* Homepage Section Toggle */}
+                <button
+                  type="button"
+                  className={`section-visibility-toggle ${showEventsSection ? "is-visible" : "is-hidden"}`}
+                  onClick={handleToggleSectionVisibility}
+                  title={showEventsSection ? "Events section is currently shown on homepage. Click to hide." : "Events section is currently hidden from homepage. Click to show."}
+                >
+                  {showEventsSection ? <Eye size={14} /> : <EyeOff size={14} />}
+                  <span>Homepage Section: {showEventsSection ? "Shown" : "Hidden"}</span>
+                </button>
+
+                {/* Table Sort Toolbar */}
+                <div className="table-sort-control">
+                  <span className="sort-label"><SlidersHorizontal size={13} /> Sort:</span>
+                  <select
+                    value={eventSort}
+                    onChange={(e) => setEventSort(e.target.value)}
+                    className="admin-sort-select"
+                  >
+                    <option value="default">Default (Manual Order)</option>
+                    <option value="newest">Date (Newest First)</option>
+                    <option value="oldest">Date (Oldest First)</option>
+                    <option value="title">Title (A-Z)</option>
+                  </select>
+                  {eventSort !== "default" && (
+                    <button
+                      type="button"
+                      className="btn-apply-order"
+                      onClick={() => handleApplySortOrder("event", eventSort)}
+                      disabled={sortingType === "event"}
+                      title="Save this sorted order to Firestore so the live website displays it"
+                    >
+                      {sortingType === "event" ? <Loader2 size={12} className="spin-icon" /> : <Save size={12} />}
+                      <span>Save as Site Order</span>
+                    </button>
+                  )}
+                </div>
+
+                {reorderingEvents && (
+                  <span className="reorder-pill saving">
+                    <Loader2 size={13} className="spin-icon" /> Saving order...
+                  </span>
+                )}
+                {reorderSuccess && (
+                  <span className="reorder-pill success">
+                    <Check size={13} /> Order saved!
+                  </span>
+                )}
+                <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
+                  onClick={() => openAdd("event")}>
+                  <Plus size={16} /> Add Event
+                </button>
+              </div>
             </div>
             <div className="admin-table-container">
               <table className="admin-table">
                 <thead>
-                  <tr><th>#</th><th>Title</th><th>Role</th><th>Venue</th><th>Date</th><th>Actions</th></tr>
+                  <tr>
+                    <th style={{ width: "36px", textAlign: "center" }} title="Drag handle"></th>
+                    <th style={{ width: "48px" }}>#</th>
+                    <th>Photo</th>
+                    <th>Title</th>
+                    <th>Role</th>
+                    <th>Venue</th>
+                    <th>Date</th>
+                    <th>Homepage</th>
+                    <th>Actions</th>
+                  </tr>
                 </thead>
                 <tbody>
-                  {events.map((e, i) => (
-                    <tr key={e.id}>
-                      <td>{e.order ?? i + 1}</td>
-                      <td><strong>{e.title}</strong></td>
+                  {getSortedList(events, eventSort).map((e, i) => (
+                    <tr 
+                      key={e.id || i}
+                      draggable
+                      onDragStart={(evt) => handleEventDragStart(evt, i)}
+                      onDragOver={(evt) => handleEventDragOver(evt, i)}
+                      onDrop={(evt) => handleEventDrop(evt, i)}
+                      onDragEnd={handleEventDragEnd}
+                      className={`draggable-row ${draggedEventIndex === i ? "is-dragging" : ""} ${dragOverEventIndex === i && draggedEventIndex !== i ? "is-drag-over" : ""}`}
+                    >
+                      <td className="drag-handle-cell" title="Drag to reorder">
+                        <span className="drag-handle-icon">
+                          <GripVertical size={16} />
+                        </span>
+                      </td>
+                      <td>
+                        <span className="order-number-badge">{i + 1}</span>
+                      </td>
+                      <td>
+                        {e.image ? (
+                          <img 
+                            src={e.image} 
+                            alt={e.title} 
+                            style={{ width: "36px", height: "36px", objectFit: "cover", borderRadius: "6px", border: "1px solid var(--border)" }} 
+                          />
+                        ) : (
+                          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>—</span>
+                        )}
+                      </td>
+                      <td>
+                        <strong>{e.title}</strong>
+                        {e.polaroidNote && (
+                          <div style={{ fontSize: "0.75rem", color: "var(--accent)", fontStyle: "italic" }}>
+                            "{e.polaroidNote}"
+                          </div>
+                        )}
+                      </td>
                       <td><span className="table-badge badge-purple">{e.role}</span></td>
                       <td>{e.venue}</td>
                       <td>{e.date}</td>
+                      <td>
+                        <button
+                          type="button"
+                          className={`visibility-toggle-pill ${e.visible !== false ? "is-visible" : "is-hidden"}`}
+                          onClick={() => handleToggleEventVisibility(e)}
+                          title={e.visible !== false ? "Shown on homepage (click to hide)" : "Hidden from homepage (click to show)"}
+                        >
+                          {e.visible !== false ? <Eye size={13} /> : <EyeOff size={13} />}
+                          <span>{e.visible !== false ? "Shown" : "Hidden"}</span>
+                        </button>
+                      </td>
                       <td className="action-cell">
-                        <button className="icon-btn edit-btn" onClick={() => openEdit("event", e)}><Pencil size={15}/></button>
-                        <button className="icon-btn del-btn"  onClick={() => handleDelete("event", e.id)}><Trash2 size={15}/></button>
+                        <button className="icon-btn edit-btn" onClick={() => openEdit("event", e)} title="Edit Event"><Pencil size={15}/></button>
+                        <button className="icon-btn del-btn"  onClick={() => handleDelete("event", e.id)} title="Delete Event"><Trash2 size={15}/></button>
                       </td>
                     </tr>
                   ))}
                   {events.length === 0 && (
-                    <tr><td colSpan={6} style={{ textAlign: "center", color: "var(--text-muted)", padding: "2rem" }}>No events yet — click Add Event.</td></tr>
+                    <tr><td colSpan={9} style={{ textAlign: "center", color: "var(--text-muted)", padding: "2rem" }}>No events yet — click Add Event.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -393,11 +867,43 @@ const Admin = () => {
             exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.3 }}
           >
             <div className="panel-section-title">
-              <h2>Journey Milestones</h2>
-              <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
-                onClick={() => openAdd("milestone")}>
-                <Plus size={16} /> Add Milestone
-              </button>
+              <div>
+                <h2>Journey Milestones</h2>
+                <p className="section-subtitle-hint">
+                  Add and edit timeline milestones. Use sort controls to arrange by date.
+                </p>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+                <div className="table-sort-control">
+                  <span className="sort-label"><SlidersHorizontal size={13} /> Sort:</span>
+                  <select
+                    value={milestoneSort}
+                    onChange={(e) => setMilestoneSort(e.target.value)}
+                    className="admin-sort-select"
+                  >
+                    <option value="default">Default (Order #)</option>
+                    <option value="newest">Date (Newest First)</option>
+                    <option value="oldest">Date (Oldest First)</option>
+                    <option value="title">Title (A-Z)</option>
+                  </select>
+                  {milestoneSort !== "default" && (
+                    <button
+                      type="button"
+                      className="btn-apply-order"
+                      onClick={() => handleApplySortOrder("milestone", milestoneSort)}
+                      disabled={sortingType === "milestone"}
+                      title="Save this sorted order to Firestore"
+                    >
+                      {sortingType === "milestone" ? <Loader2 size={12} className="spin-icon" /> : <Save size={12} />}
+                      <span>Save as Site Order</span>
+                    </button>
+                  )}
+                </div>
+                <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
+                  onClick={() => openAdd("milestone")}>
+                  <Plus size={16} /> Add Milestone
+                </button>
+              </div>
             </div>
             <div className="admin-table-container">
               <table className="admin-table">
@@ -405,7 +911,7 @@ const Admin = () => {
                   <tr><th>#</th><th>Title</th><th>Date / Phase</th><th>Description</th><th>Actions</th></tr>
                 </thead>
                 <tbody>
-                  {milestones.map((m, i) => (
+                  {getSortedList(milestones, milestoneSort).map((m, i) => (
                     <tr key={m.id}>
                       <td>{m.order ?? i + 1}</td>
                       <td><strong>{m.title}</strong></td>
@@ -433,11 +939,43 @@ const Admin = () => {
             exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.3 }}
           >
             <div className="panel-section-title">
-              <h2>Certifications &amp; Credentials</h2>
-              <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
-                onClick={() => openAdd("certification")}>
-                <Plus size={16} /> Add Certificate
-              </button>
+              <div>
+                <h2>Certifications &amp; Credentials</h2>
+                <p className="section-subtitle-hint">
+                  Manage certifications. Use sort controls to arrange by date or title.
+                </p>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+                <div className="table-sort-control">
+                  <span className="sort-label"><SlidersHorizontal size={13} /> Sort:</span>
+                  <select
+                    value={certSort}
+                    onChange={(e) => setCertSort(e.target.value)}
+                    className="admin-sort-select"
+                  >
+                    <option value="default">Default (Order #)</option>
+                    <option value="newest">Date (Newest First)</option>
+                    <option value="oldest">Date (Oldest First)</option>
+                    <option value="title">Title (A-Z)</option>
+                  </select>
+                  {certSort !== "default" && (
+                    <button
+                      type="button"
+                      className="btn-apply-order"
+                      onClick={() => handleApplySortOrder("certification", certSort)}
+                      disabled={sortingType === "certification"}
+                      title="Save this sorted order to Firestore"
+                    >
+                      {sortingType === "certification" ? <Loader2 size={12} className="spin-icon" /> : <Save size={12} />}
+                      <span>Save as Site Order</span>
+                    </button>
+                  )}
+                </div>
+                <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
+                  onClick={() => openAdd("certification")}>
+                  <Plus size={16} /> Add Certificate
+                </button>
+              </div>
             </div>
             <div className="admin-table-container">
               <table className="admin-table">
@@ -445,7 +983,7 @@ const Admin = () => {
                   <tr><th>#</th><th>Title</th><th>Issuer</th><th>Date</th><th>Credential Link</th><th>Actions</th></tr>
                 </thead>
                 <tbody>
-                  {certifications.map((c, i) => (
+                  {getSortedList(certifications, certSort).map((c, i) => (
                     <tr key={c.id}>
                       <td>{c.order ?? i + 1}</td>
                       <td><strong>{c.title}</strong></td>
@@ -474,6 +1012,16 @@ const Admin = () => {
             </div>
           </motion.div>
         )}
+
+        {/* THEME STUDIO */}
+        {activeTab === "theme" && (
+          <motion.div key="theme" className="admin-panel-card glass"
+            initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.3 }}
+          >
+            <ThemeStudio />
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* ── CRUD Modal ── */}
@@ -492,13 +1040,23 @@ const Admin = () => {
                 <Field label="Title *"       name="title"       value={formData.title || ""}       onChange={handleChange} />
                 <Field label="Order"         name="order"       value={formData.order || ""}       onChange={handleChange} type="number" />
               </div>
+              <div className="modal-grid-2">
+                <Field label="Timeline / Date" name="date" value={formData.date || ""} onChange={handleChange} placeholder="e.g. October 2026" />
+                <Field label="Tech (comma-separated)" name="tech" value={Array.isArray(formData.tech) ? formData.tech.join(", ") : formData.tech || ""} onChange={handleChange} />
+              </div>
               <Field label="Description"   name="description" value={formData.description || ""} onChange={handleChange} rows={3} />
               <div className="modal-grid-2">
-                <Field label="Tech (comma-separated)" name="tech" value={Array.isArray(formData.tech) ? formData.tech.join(", ") : formData.tech || ""} onChange={handleChange} />
-                <Field label="Image URL"     name="image"       value={formData.image || ""}       onChange={handleChange} />
+                <ImageUploadField
+                  label="Project Banner / Image"
+                  name="image"
+                  value={formData.image || ""}
+                  onChange={handleChange}
+                  onUploadSuccess={handleImageUploaded}
+                  onError={(msg) => setError(msg)}
+                />
+                <Field label="Live URL"      name="liveUrl"     value={formData.liveUrl || ""}     onChange={handleChange} />
               </div>
               <div className="modal-grid-2">
-                <Field label="Live URL"      name="liveUrl"     value={formData.liveUrl || ""}     onChange={handleChange} />
                 <Field label="GitHub URL"    name="githubUrl"   value={formData.githubUrl || ""}   onChange={handleChange} />
               </div>
             </>
@@ -518,8 +1076,42 @@ const Admin = () => {
                 <Field label="Attendees"   name="attendees" value={formData.attendees || ""} onChange={handleChange} />
                 <Field label="Tag"         name="tag"       value={formData.tag || ""}       onChange={handleChange} />
               </div>
-              <Field label="Description" name="desc"      value={formData.desc || ""}      onChange={handleChange} rows={3} />
-              <Field label="Order"       name="order"     value={formData.order || ""}     onChange={handleChange} type="number" />
+              <Field 
+                label="Polaroid Caption (Handwritten Note)" 
+                name="polaroidNote" 
+                value={formData.polaroidNote || ""} 
+                onChange={handleChange} 
+                placeholder="e.g. Inspiring Grade 8 minds on AI & Prompting! 💡" 
+              />
+              <ImageUploadField
+                label="Event Snapshot / Polaroid Photo"
+                name="image"
+                value={formData.image || ""}
+                onChange={handleChange}
+                onUploadSuccess={handleImageUploaded}
+                onError={(msg) => setError(msg)}
+              />
+              <Field label="Story / Description" name="desc" value={formData.desc || ""} onChange={handleChange} rows={3} />
+              
+              <div className="visibility-switch-card">
+                <div className="switch-info">
+                  <strong>Show on Homepage</strong>
+                  <span>{formData.visible !== false ? "Visible in the homepage moments gallery" : "Hidden from homepage"}</span>
+                </div>
+                <button
+                  type="button"
+                  className={`visibility-switch-btn ${formData.visible !== false ? "active" : "inactive"}`}
+                  onClick={() => setFormData(prev => ({ ...prev, visible: prev.visible === false ? true : false }))}
+                >
+                  {formData.visible !== false ? <Eye size={15} /> : <EyeOff size={15} />}
+                  <span>{formData.visible !== false ? "Visible" : "Hidden"}</span>
+                </button>
+              </div>
+
+              <div className="order-helper-badge">
+                <span>Display Order: <strong>#{formData.order || events.length + 1}</strong></span>
+                <span className="order-helper-hint">💡 Drag and drop rows in the Events table to rearrange order anytime!</span>
+              </div>
             </>
           )}
 
@@ -545,8 +1137,22 @@ const Admin = () => {
                 <Field label="Order"           name="order"         value={formData.order || ""}         onChange={handleChange} type="number" />
               </div>
               <div className="modal-grid-2">
-                <Field label="Credential Image URL" name="credentialUrl" value={formData.credentialUrl || ""} onChange={handleChange} />
-                <Field label="Issuer Logo URL"      name="logo"          value={formData.logo || ""}          onChange={handleChange} />
+                <ImageUploadField
+                  label="Certificate Image"
+                  name="credentialUrl"
+                  value={formData.credentialUrl || ""}
+                  onChange={handleChange}
+                  onUploadSuccess={handleImageUploaded}
+                  onError={(msg) => setError(msg)}
+                />
+                <ImageUploadField
+                  label="Issuer Logo"
+                  name="logo"
+                  value={formData.logo || ""}
+                  onChange={handleChange}
+                  onUploadSuccess={handleImageUploaded}
+                  onError={(msg) => setError(msg)}
+                />
               </div>
             </>
           )}

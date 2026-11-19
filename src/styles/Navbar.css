@@ -11,14 +11,13 @@
   z-index: 1000;
   padding: 1rem 2rem;
   transition: var(--transition);
-  border-bottom: 1px solid transparent;
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
 }
 
 .navbar.scrolled {
-  background: var(--glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow-lg);
   padding: 0.8rem 2rem;
 }

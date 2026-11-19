@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import {
   User,
@@ -80,6 +80,10 @@ const About = () => {
     }, defaultMilestones);
     return () => unsub();
   }, []);
+
+  const sortedMilestones = useMemo(() => {
+    return [...milestones].sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+  }, [milestones]);
 
   const { scrollYProgress } = useScroll({
     target: timelineRef,
@@ -166,18 +170,21 @@ const About = () => {
       </div>
 
       <div className="experience-timeline">
-        <motion.h3
-          className="sub-title"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.6 }}
-        >
-          Journey So Far
-        </motion.h3>
+        <div className="timeline-header-row">
+          <motion.h3
+            className="sub-title"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6 }}
+          >
+            Journey So Far
+          </motion.h3>
+        </div>
+
         <div className="timeline" ref={timelineRef}>
           <motion.div className="timeline-progress-bar" style={{ scaleY }} />
-          {milestones.map((item, index) => (
+          {sortedMilestones.map((item, index) => (
             <motion.div
               className="timeline-item glass"
               key={item.id || index}

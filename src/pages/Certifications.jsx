@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Award, ExternalLink, CalendarDays, X, Verified } from "lucide-react";
 import { subscribeCollection, defaultCertifications } from "../services/portfolioService";
 import "../styles/Certifications.css";
@@ -19,6 +19,10 @@ const Certifications = () => {
     }, defaultCertifications);
     return () => unsub();
   }, []);
+
+  const sortedCerts = useMemo(() => {
+    return [...certs].sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+  }, [certs]);
 
   // Close modal on ESC key
   useEffect(() => {
@@ -52,7 +56,7 @@ const Certifications = () => {
 
         <div className="certifications-content">
           <div className="cert-grid">
-            {certs.map((cert, index) => {
+            {sortedCerts.map((cert, index) => {
               const themeClass = themes[index % 3];
               return (
                 <div 

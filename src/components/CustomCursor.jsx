@@ -1,19 +1,44 @@
 import React, { useEffect, useRef } from "react";
+import { useTheme } from "../context/ThemeContext";
 import "../styles/CustomCursor.css";
 
 const CustomCursor = () => {
-  // Evaluate touch check before any hooks — stored as a plain value, not a hook
   const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+  const { theme } = useTheme();
 
-  // All hooks are declared unconditionally to satisfy Rules of Hooks
   const canvasRef = useRef(null);
   const dotRef = useRef(null);
   const mouse = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const pos = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const particles = useRef([]);
+  const themeRef = useRef(theme);
+
+  // Keep themeRef updated so the animation loop always picks up current theme colors
+  useEffect(() => {
+    themeRef.current = theme;
+  }, [theme]);
+
+  // Convert hex / rgb string to rgba with given alpha
+  const hexToRgba = (hexOrRgb, alpha = 0.45) => {
+    if (!hexOrRgb) return `rgba(226, 180, 189, ${alpha})`;
+    if (hexOrRgb.startsWith("rgba")) {
+      return hexOrRgb.replace(/[\d\.]+\)$/g, `${alpha})`);
+    }
+    if (hexOrRgb.startsWith("rgb(")) {
+      return hexOrRgb.replace("rgb(", "rgba(").replace(")", `, ${alpha})`);
+    }
+    if (hexOrRgb.startsWith("#")) {
+      let hex = hexOrRgb.replace("#", "");
+      if (hex.length === 3) hex = hex.split("").map((c) => c + c).join("");
+      const r = parseInt(hex.substring(0, 2), 16) || 0;
+      const g = parseInt(hex.substring(2, 4), 16) || 0;
+      const b = parseInt(hex.substring(4, 6), 16) || 0;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+    return `rgba(226, 180, 189, ${alpha})`;
+  };
 
   useEffect(() => {
-    // Guard inside the effect — no-op on touch devices
     if (isTouchDevice) return;
 
     const canvas = canvasRef.current;
@@ -30,22 +55,28 @@ const CustomCursor = () => {
     resize();
 
     const createParticle = () => {
+      const currentTheme = themeRef.current || {};
+      const primaryRgba = hexToRgba(currentTheme.primary, 0.48);
+      const secondaryRgba = hexToRgba(
+        currentTheme.secondary || currentTheme.primaryDark || currentTheme.accent, 
+        0.42
+      );
+
       particles.current.push({
         x: mouse.current.x,
         y: mouse.current.y,
-        size: Math.random() * 35 + 25,
+        size: Math.random() * 32 + 22,
         speedX: (Math.random() - 0.5) * 1.5,
         speedY: (Math.random() - 0.5) * 1.5 - 1.2,
-        opacity: 0.5,
-        color: Math.random() > 0.5 ? "rgba(99, 102, 241, 0.4)" : "rgba(236, 72, 153, 0.4)",
+        opacity: 0.55,
+        color: Math.random() > 0.45 ? primaryRgba : secondaryRgba,
       });
     };
 
     const updateParticles = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Smoothly interpolate the white dot's position to the physical mouse
-      // A high lerp factor (like 0.4) makes it very responsive yet silky smooth
+      // Smooth interpolation for the cursor dot
       pos.current.x += (mouse.current.x - pos.current.x) * 0.4;
       pos.current.y += (mouse.current.y - pos.current.y) * 0.4;
 
@@ -94,7 +125,6 @@ const CustomCursor = () => {
     };
   }, [isTouchDevice]);
 
-  // Conditional render AFTER all hooks
   if (isTouchDevice) return null;
 
   return (
@@ -107,12 +137,13 @@ const CustomCursor = () => {
           left: 0,
           width: "10px",
           height: "10px",
-          backgroundColor: "#fff",
+          backgroundColor: theme?.primary || "#ffffff",
           borderRadius: "50%",
           pointerEvents: "none",
           zIndex: 10000,
-          boxShadow: "0 0 15px rgba(255, 255, 255, 0.6)",
+          boxShadow: `0 0 16px ${theme?.primary || "#ffffff"}, 0 0 6px #ffffff`,
           willChange: "transform",
+          transition: "background-color 0.25s ease, box-shadow 0.25s ease",
         }}
       />
       <canvas
@@ -124,7 +155,7 @@ const CustomCursor = () => {
           left: 0,
           pointerEvents: "none",
           zIndex: 9999,
-          filter: "blur(40px)",
+          filter: "blur(38px)",
         }}
       />
     </>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import ProjectCard from "../components/ProjectCard";
 import { subscribeCollection, defaultProjects } from "../services/portfolioService";
 import "../styles/Projects.css";
@@ -16,6 +16,10 @@ const Projects = () => {
     return () => unsubscribe();
   }, []);
 
+  const sortedProjects = useMemo(() => {
+    return [...projects].sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+  }, [projects]);
+
   return (
     <div className="projects-page fusion-container fade-in">
       <div className="fusion-background">
@@ -32,7 +36,7 @@ const Projects = () => {
         </div>
 
         <div className="fusion-grid">
-          {projects.map((project, index) => {
+          {sortedProjects.map((project, index) => {
             const formattedTech = Array.isArray(project.tech) 
               ? project.tech 
               : (typeof project.tech === "string" ? project.tech.split(",").map(t => t.trim()) : []);

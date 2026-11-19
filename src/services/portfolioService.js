@@ -2,13 +2,15 @@ import {
   collection, 
   getDocs, 
   addDoc, 
+  setDoc,
   updateDoc, 
   deleteDoc, 
   doc, 
   query, 
   orderBy, 
   onSnapshot,
-  serverTimestamp
+  serverTimestamp,
+  writeBatch
 } from "firebase/firestore";
 import { db } from "../firebase/config";
 
@@ -116,6 +118,11 @@ export const defaultEvents = [
     tag: "Workshop",
     tagColor: "primary",
     desc: "Introduced AI fundamentals and prompt engineering basics to secondary school students under the theme 'Explore • Prompt • Think', helping them think critically about how AI shapes everyday life.",
+    polaroidNote: "Inspiring Grade 8 minds on AI & Prompting! 💡",
+    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=AI+Literacy+Workshop",
+    rotation: "-rotate-2",
+    visible: true,
     order: 1
   },
   {
@@ -127,6 +134,11 @@ export const defaultEvents = [
     tag: "Workshop",
     tagColor: "primary",
     desc: "Led interactive prompt-engineering demonstrations and explored the boundary between AI assistance and human creativity while promoting safe, ethical digital habits in academic settings.",
+    polaroidNote: "Prompting live demos & human creativity! 🤖",
+    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=AI+Exploration+Session",
+    rotation: "rotate-2",
+    visible: true,
     order: 2
   },
   {
@@ -138,6 +150,11 @@ export const defaultEvents = [
     tag: "Workshop",
     tagColor: "secondary",
     desc: "Delivered a foundational cybersecurity awareness session under the theme 'Think • Test • Score', equipping students with threat-detection skills, password hygiene, and safe online browsing routines.",
+    polaroidNote: "Think • Test • Score — Cybersecurity 101 🛡️",
+    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=Cybersecurity+101",
+    rotation: "-rotate-1",
+    visible: true,
     order: 3
   },
   {
@@ -149,6 +166,11 @@ export const defaultEvents = [
     tag: "Industry Visit",
     tagColor: "accent",
     desc: "Visited Leapfrog Technology to observe production-grade software engineering in action. Engaged in open Q&A with industry professionals and gained deeper insight into real-world development workflows and career paths.",
+    polaroidNote: "Inside Leapfrog's engineering culture 🚀",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=Leapfrog+Industry+Visit",
+    rotation: "rotate-3",
+    visible: true,
     order: 4
   },
   {
@@ -160,6 +182,11 @@ export const defaultEvents = [
     tag: "Volunteer",
     tagColor: "secondary",
     desc: "Contributed as part of the Web & Tech Team for the Hult Prize On-Campus Program, designing and developing the official event platform to support student teams pursuing social innovation.",
+    polaroidNote: "Designing the platform for student innovators ✨",
+    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=Hult+Prize+Samriddhi",
+    rotation: "-rotate-2",
+    visible: true,
     order: 5
   },
   {
@@ -171,6 +198,11 @@ export const defaultEvents = [
     tag: "Bootcamp",
     tagColor: "accent",
     desc: "Completed an intensive web development bootcamp organized by Samriddhi IT Club covering modern web technologies, hands-on projects, and industry-grade development practices.",
+    polaroidNote: "Sprint coding & building full-stack projects 💻",
+    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80",
+    fallback: "https://placehold.co/800x600/1e293b/fbbf24?text=Web+Dev+Bootcamp",
+    rotation: "rotate-1",
+    visible: true,
     order: 6
   }
 ];
@@ -390,6 +422,147 @@ export const updateEvent = async (id, eventData) => {
 export const deleteEvent = async (id) => {
   if (!db) throw new Error("Database not connected");
   return await deleteDoc(doc(db, "events", id));
+};
+
+export const reorderEvents = async (orderedEvents) => {
+  if (!db) throw new Error("Database not connected");
+  const batch = writeBatch(db);
+  orderedEvents.forEach((item, index) => {
+    if (item.id) {
+      const eventRef = doc(db, "events", item.id);
+      batch.update(eventRef, {
+        order: index + 1,
+        updatedAt: serverTimestamp()
+      });
+    }
+  });
+  return await batch.commit();
+};
+
+export const reorderProjects = async (orderedProjects) => {
+  if (!db) throw new Error("Database not connected");
+  const batch = writeBatch(db);
+  orderedProjects.forEach((item, index) => {
+    if (item.id) {
+      const pRef = doc(db, "projects", item.id);
+      batch.update(pRef, {
+        order: index + 1,
+        updatedAt: serverTimestamp()
+      });
+    }
+  });
+  return await batch.commit();
+};
+
+export const reorderMilestones = async (orderedMilestones) => {
+  if (!db) throw new Error("Database not connected");
+  const batch = writeBatch(db);
+  orderedMilestones.forEach((item, index) => {
+    if (item.id) {
+      const mRef = doc(db, "milestones", item.id);
+      batch.update(mRef, {
+        order: index + 1,
+        updatedAt: serverTimestamp()
+      });
+    }
+  });
+  return await batch.commit();
+};
+
+export const reorderCertifications = async (orderedCertifications) => {
+  if (!db) throw new Error("Database not connected");
+  const batch = writeBatch(db);
+  orderedCertifications.forEach((item, index) => {
+    if (item.id) {
+      const cRef = doc(db, "certifications", item.id);
+      batch.update(cRef, {
+        order: index + 1,
+        updatedAt: serverTimestamp()
+      });
+    }
+  });
+  return await batch.commit();
+};
+
+// Smart date parser converting varied formats into epoch milliseconds for accurate sorting
+export const parseDateString = (itemOrDate) => {
+  if (!itemOrDate) return 0;
+  if (typeof itemOrDate === "object") {
+    if (itemOrDate.isoDate) {
+      const t = new Date(itemOrDate.isoDate).getTime();
+      if (!isNaN(t)) return t;
+    }
+    if (itemOrDate.createdAt?.seconds) {
+      return itemOrDate.createdAt.seconds * 1000;
+    }
+  }
+
+  const rawStr = typeof itemOrDate === "string" 
+    ? itemOrDate 
+    : (itemOrDate.date || itemOrDate.createdAt || "");
+
+  if (!rawStr || typeof rawStr !== "string") return 0;
+
+  // Remove ordinal endings like 18th -> 18
+  const cleaned = rawStr.replace(/(\d+)(st|nd|rd|th)/gi, "$1");
+
+  // Extract 4-digit year
+  const yearMatch = cleaned.match(/\b(20\d{2}|19\d{2})\b/);
+  const year = yearMatch ? parseInt(yearMatch[1], 10) : 2024;
+
+  const months = {
+    jan: 0, january: 0,
+    feb: 1, february: 1,
+    mar: 2, march: 2,
+    apr: 3, april: 3,
+    may: 4,
+    jun: 5, june: 5,
+    jul: 6, july: 6,
+    aug: 7, august: 7,
+    sep: 8, sept: 8, september: 8,
+    oct: 9, october: 9,
+    nov: 10, november: 10,
+    dec: 11, december: 11,
+  };
+
+  const lower = cleaned.toLowerCase();
+  let month = 0;
+  let foundMonth = false;
+  for (const [mName, mIdx] of Object.entries(months)) {
+    if (lower.includes(mName)) {
+      month = mIdx;
+      foundMonth = true;
+    }
+  }
+
+  const dayMatch = cleaned.match(/\b([1-9]|[12]\d|3[01])\b/);
+  const day = dayMatch ? parseInt(dayMatch[1], 10) : 1;
+
+  if (!yearMatch && !foundMonth) {
+    if (lower.includes("discovery")) return new Date(2023, 0, 1).getTime();
+    return 0;
+  }
+
+  const result = new Date(year, month, day).getTime();
+  return isNaN(result) ? 0 : result;
+};
+
+export const toggleEventVisibility = async (id, isVisible) => {
+  if (!db) throw new Error("Database not connected");
+  const eventRef = doc(db, "events", id);
+  return await updateDoc(eventRef, {
+    visible: isVisible,
+    updatedAt: serverTimestamp()
+  });
+};
+
+export const setEventsSectionSetting = async (showSection) => {
+  if (!db) throw new Error("Database not connected");
+  const configRef = doc(db, "events", "_settings");
+  return await setDoc(configRef, {
+    showEventsSection: showSection,
+    updatedAt: serverTimestamp()
+  }, { merge: true });
 };
 
 // CRUD Operations for Milestones

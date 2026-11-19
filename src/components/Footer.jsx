@@ -43,7 +43,7 @@ const Footer = () => {
         <div className="footer-content">
           <div className="footer-brand">
             <h3 className="logo-text">
-              Dev<span className="gradient-text">Portfolio</span>
+              Dev<span className="logo-accent">Portfolio</span>
             </h3>
             <p className="footer-bio">
               Building digital experiences that matter. Focused on performance,
