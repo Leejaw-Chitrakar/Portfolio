@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { motion, useScroll, useSpring } from "framer-motion";
 import {
   User,
@@ -7,6 +8,12 @@ import {
   MapPin,
   Phone,
   Mail,
+  Rocket,
+  Sparkles,
+  Gamepad2,
+  Compass,
+  ArrowRight,
+  Calendar,
 } from "lucide-react";
 import { subscribeCollection, defaultMilestones } from "../services/portfolioService";
 import "../styles/About.css";
@@ -169,8 +176,13 @@ const About = () => {
         </div>
       </div>
 
+      {/* ── Journey So Far — Alternating Interactive Timeline ── */}
       <div className="experience-timeline">
         <div className="timeline-header-row">
+          <div className="timeline-header-badge">
+            <Sparkles size={14} style={{ color: "var(--accent)" }} />
+            <span>Milestones &amp; Evolution</span>
+          </div>
           <motion.h3
             className="sub-title"
             initial={{ opacity: 0, y: 20 }}
@@ -180,27 +192,138 @@ const About = () => {
           >
             Journey So Far
           </motion.h3>
+          <p className="timeline-header-sub">
+            Key steps, academic foundations, and production software built along the way.
+          </p>
         </div>
 
-        <div className="timeline" ref={timelineRef}>
+        <div className="timeline-container" ref={timelineRef}>
+          {/* Animated central glowing scroll progress beam & track */}
+          <div className="timeline-track" />
           <motion.div className="timeline-progress-bar" style={{ scaleY }} />
-          {sortedMilestones.map((item, index) => (
-            <motion.div
-              className="timeline-item glass"
-              key={item.id || index}
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: 0.08 }}
-            >
-              <div className="timeline-dot"></div>
-              <div className="timeline-content">
-                <h4>{item.title}</h4>
-                <span className="timeline-date">{item.date}</span>
-                <p>{item.desc}</p>
-              </div>
-            </motion.div>
-          ))}
+
+          <div className="timeline-list">
+            {sortedMilestones.map((item, index) => {
+              const isLeft = index % 2 === 0;
+              const stepNumber = String(index + 1).padStart(2, "0");
+
+              // Derive Category, Icon, and Color Class (strictly configured per milestone)
+              const category = item.category || "Key Milestone";
+              let IconComp = Sparkles;
+              let colorCls = "meta-primary";
+              let hasProjectLink = false;
+
+              if (category === "Education & Degree") {
+                IconComp = GraduationCap;
+                colorCls = "meta-blue";
+              } else if (category === "Project Launch") {
+                IconComp = Rocket;
+                colorCls = "meta-emerald";
+                hasProjectLink = true;
+              } else if (category === "Early Exploration") {
+                IconComp = Gamepad2;
+                colorCls = "meta-amber";
+              } else if (category === "Industry Experience") {
+                IconComp = Compass;
+                colorCls = "meta-purple";
+              } else {
+                IconComp = Sparkles;
+                colorCls = "meta-primary";
+              }
+
+              // Determine target link
+              const targetLink = item.link && item.link.trim() ? item.link.trim() : (hasProjectLink ? "/projects" : null);
+              const isExternalLink = targetLink && (targetLink.startsWith("http://") || targetLink.startsWith("https://"));
+
+              // Extract Relevant Tech Tags (Requirement 3)
+              const knownKeywords = [
+                "React", "Node.js", "Firebase", "JavaScript", "Vite", "MongoDB",
+                "MERN", "Express", "GSAP", "C++", "C", "HTML", "CSS", "SaaS",
+                "E-Commerce", "REST APIs", "Firestore", "Split Billing", "Khata"
+              ];
+              const rawText = `${item.title || ""} ${item.desc || ""}`;
+              const techTags = (item.tags && Array.isArray(item.tags))
+                ? item.tags
+                : knownKeywords.filter((kw) => {
+                    const regex = new RegExp(`\\b${kw.replace("+", "\\+")}\\b`, "i");
+                    return regex.test(rawText);
+                  }).slice(0, 4);
+
+              return (
+                <motion.div
+                  className={`timeline-row ${isLeft ? "row-left" : "row-right"}`}
+                  key={item.id || index}
+                  initial={{ opacity: 0, x: isLeft ? -35 : 35, y: 20 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.55, delay: 0.04 }}
+                >
+                  {/* Central Spine Node with Category Icon */}
+                  <div className="timeline-spine-node" title={category}>
+                    <div className={`timeline-node-halo ${colorCls}`} />
+                    <div className={`timeline-node-core ${colorCls}`}>
+                      <IconComp size={19} className="node-icon" />
+                    </div>
+                  </div>
+
+                  {/* Horizontal Connector Branch linking Node directly to Card */}
+                  <div className={`timeline-branch ${isLeft ? "branch-left" : "branch-right"} ${colorCls}`} />
+
+                  {/* Glassmorphic Milestone Card */}
+                  <div className="timeline-card glass">
+                    {/* Glowing Accent Top Bar */}
+                    <div className={`card-glow-bar ${colorCls}`} />
+
+                    {/* Card Header: Category Badge + Date Pill */}
+                    <div className="milestone-card-header">
+                      <span className={`milestone-category-badge ${colorCls}`}>
+                        <IconComp size={13} />
+                        <span>{category}</span>
+                      </span>
+                      <span className="milestone-date-pill">
+                        <Calendar size={12} />
+                        <span>{item.date}</span>
+                      </span>
+                    </div>
+
+                    {/* Milestone Title */}
+                    <h4 className="milestone-card-title">{item.title}</h4>
+
+                    {/* Milestone Description */}
+                    <p className="milestone-card-desc">{item.desc}</p>
+
+                    {/* Tech Badges (Requirement 3) */}
+                    {techTags.length > 0 && (
+                      <div className="milestone-tags-row">
+                        {techTags.map((tech, tIdx) => (
+                          <span key={tIdx} className="milestone-tech-pill">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Action Link */}
+                    {targetLink && (
+                      <div className="milestone-footer-row">
+                        {isExternalLink ? (
+                          <a href={targetLink} target="_blank" rel="noopener noreferrer" className="milestone-link-btn">
+                            <span>Explore Project</span>
+                            <ArrowRight size={13} />
+                          </a>
+                        ) : (
+                          <Link to={targetLink} className="milestone-link-btn">
+                            <span>Explore in Projects</span>
+                            <ArrowRight size={13} />
+                          </Link>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

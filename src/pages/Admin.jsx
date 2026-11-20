@@ -28,8 +28,10 @@ import {
   Palette,
   SlidersHorizontal,
   ArrowUpDown,
+  Settings,
 } from "lucide-react";
 import ThemeStudio from "../components/ThemeStudio.jsx";
+import SettingsPanel from "../components/SettingsPanel.jsx";
 import { useAuth } from "../context/AuthContext";
 import { uploadToImgBB } from "../services/imageUploadService";
 import {
@@ -64,7 +66,7 @@ const BLANK_EVENT = {
   title: "", role: "", date: "", venue: "", attendees: "", tag: "", tagColor: "primary", desc: "", polaroidNote: "", image: "", visible: true, order: 0,
 };
 const BLANK_MILESTONE = {
-  title: "", date: "", desc: "", order: 0,
+  title: "", date: "", desc: "", category: "Key Milestone", tags: "", link: "", order: 0,
 };
 const BLANK_CERTIFICATION = {
   title: "", issuer: "", date: "", credentialUrl: "", logo: "", order: 0,
@@ -106,13 +108,13 @@ const Modal = ({ title, onClose, onSave, saving, children }) => {
 };
 
 /* ─── Field helper ─── */
-const Field = ({ label, name, value, onChange, type = "text", rows }) => (
+const Field = ({ label, name, value, onChange, type = "text", rows, placeholder }) => (
   <div className="modal-field">
     <label>{label}</label>
     {rows ? (
-      <textarea rows={rows} name={name} value={value} onChange={onChange} />
+      <textarea rows={rows} name={name} value={value} onChange={onChange} placeholder={placeholder} />
     ) : (
-      <input type={type} name={name} value={value} onChange={onChange} />
+      <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} />
     )}
   </div>
 );
@@ -263,6 +265,18 @@ const Admin = () => {
   const [dragOverEventIndex, setDragOverEventIndex] = useState(null);
   const [reorderingEvents, setReorderingEvents] = useState(false);
   const [reorderSuccess, setReorderSuccess] = useState(false);
+
+  /* Drag-and-drop state for milestones */
+  const [draggedMilestoneIndex, setDraggedMilestoneIndex] = useState(null);
+  const [dragOverMilestoneIndex, setDragOverMilestoneIndex] = useState(null);
+  const [reorderingMilestones, setReorderingMilestones] = useState(false);
+  const [milestoneReorderSuccess, setMilestoneReorderSuccess] = useState(false);
+
+  /* Drag-and-drop state for certifications */
+  const [draggedCertIndex, setDraggedCertIndex] = useState(null);
+  const [dragOverCertIndex, setDragOverCertIndex] = useState(null);
+  const [reorderingCerts, setReorderingCerts] = useState(false);
+  const [certReorderSuccess, setCertReorderSuccess] = useState(false);
 
   /* Section setting state */
   const [showEventsSection, setShowEventsSection] = useState(true);
@@ -428,6 +442,114 @@ const Admin = () => {
     setDragOverEventIndex(null);
   };
 
+  /* Drag handlers for Milestones */
+  const handleMilestoneDragStart = (e, index) => {
+    setDraggedMilestoneIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", index);
+  };
+
+  const handleMilestoneDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (dragOverMilestoneIndex !== index) {
+      setDragOverMilestoneIndex(index);
+    }
+  };
+
+  const handleMilestoneDrop = async (e, targetIndex) => {
+    e.preventDefault();
+    if (draggedMilestoneIndex === null || draggedMilestoneIndex === targetIndex) {
+      setDraggedMilestoneIndex(null);
+      setDragOverMilestoneIndex(null);
+      return;
+    }
+
+    const reordered = [...milestones];
+    const [movedItem] = reordered.splice(draggedMilestoneIndex, 1);
+    reordered.splice(targetIndex, 0, movedItem);
+
+    const updatedMilestones = reordered.map((item, idx) => ({
+      ...item,
+      order: idx + 1,
+    }));
+
+    setMilestones(updatedMilestones);
+    setDraggedMilestoneIndex(null);
+    setDragOverMilestoneIndex(null);
+
+    try {
+      setReorderingMilestones(true);
+      await reorderMilestones(updatedMilestones);
+      setMilestoneReorderSuccess(true);
+      setTimeout(() => setMilestoneReorderSuccess(false), 2500);
+    } catch (err) {
+      console.error("Failed to reorder milestones in Firestore:", err);
+      alert("Failed to save new milestone order: " + err.message);
+    } finally {
+      setReorderingMilestones(false);
+    }
+  };
+
+  const handleMilestoneDragEnd = () => {
+    setDraggedMilestoneIndex(null);
+    setDragOverMilestoneIndex(null);
+  };
+
+  /* Drag handlers for Certifications */
+  const handleCertDragStart = (e, index) => {
+    setDraggedCertIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", index);
+  };
+
+  const handleCertDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (dragOverCertIndex !== index) {
+      setDragOverCertIndex(index);
+    }
+  };
+
+  const handleCertDrop = async (e, targetIndex) => {
+    e.preventDefault();
+    if (draggedCertIndex === null || draggedCertIndex === targetIndex) {
+      setDraggedCertIndex(null);
+      setDragOverCertIndex(null);
+      return;
+    }
+
+    const reordered = [...certifications];
+    const [movedItem] = reordered.splice(draggedCertIndex, 1);
+    reordered.splice(targetIndex, 0, movedItem);
+
+    const updatedCerts = reordered.map((item, idx) => ({
+      ...item,
+      order: idx + 1,
+    }));
+
+    setCertifications(updatedCerts);
+    setDraggedCertIndex(null);
+    setDragOverCertIndex(null);
+
+    try {
+      setReorderingCerts(true);
+      await reorderCertifications(updatedCerts);
+      setCertReorderSuccess(true);
+      setTimeout(() => setCertReorderSuccess(false), 2500);
+    } catch (err) {
+      console.error("Failed to reorder certifications in Firestore:", err);
+      alert("Failed to save new certification order: " + err.message);
+    } finally {
+      setReorderingCerts(false);
+    }
+  };
+
+  const handleCertDragEnd = () => {
+    setDraggedCertIndex(null);
+    setDragOverCertIndex(null);
+  };
+
   /* Logout */
   const handleLogout = async () => {
     try { await logout(); navigate("/login"); }
@@ -437,18 +559,22 @@ const Admin = () => {
   /* ── Open modals ── */
   const openAdd = (type) => {
     const blank = type === "project" 
-      ? BLANK_PROJECT 
+      ? { ...BLANK_PROJECT, order: projects.length + 1 }
       : type === "event" 
       ? { ...BLANK_EVENT, order: events.length + 1 } 
       : type === "milestone" 
-      ? BLANK_MILESTONE 
-      : BLANK_CERTIFICATION;
+      ? { ...BLANK_MILESTONE, order: milestones.length + 1 }
+      : { ...BLANK_CERTIFICATION, order: certifications.length + 1 };
     setFormData({ ...blank });
     setModal({ type, mode: "add" });
     setError("");
   };
   const openEdit = (type, item) => {
-    setFormData({ ...item });
+    const data = { ...item };
+    if (type === "milestone" && Array.isArray(data.tags)) {
+      data.tags = data.tags.join(", ");
+    }
+    setFormData(data);
     setModal({ type, mode: "edit", id: item.id });
     setError("");
   };
@@ -474,6 +600,9 @@ const Admin = () => {
       const payload = { ...formData };
       if (type === "project" && typeof payload.tech === "string") {
         payload.tech = payload.tech.split(",").map((t) => t.trim()).filter(Boolean);
+      }
+      if (type === "milestone" && typeof payload.tags === "string") {
+        payload.tags = payload.tags.split(",").map((t) => t.trim()).filter(Boolean);
       }
       payload.order = Number(payload.order) || 0;
 
@@ -562,6 +691,7 @@ const Admin = () => {
           { key: "milestones",     icon: <Compass size={18}/>,      label: "Milestones" },
           { key: "certifications", icon: <Award size={18}/>,        label: "Certifications" },
           { key: "theme",          icon: <Palette size={18}/>,      label: "Theme" },
+          { key: "settings",       icon: <Settings size={18}/>,     label: "Settings" },
         ].map((t) => (
           <button
             key={t.key}
@@ -870,7 +1000,7 @@ const Admin = () => {
               <div>
                 <h2>Journey Milestones</h2>
                 <p className="section-subtitle-hint">
-                  Add and edit timeline milestones. Use sort controls to arrange by date.
+                  <GripVertical size={14} /> Drag rows using the handle icon to set and save the order.
                 </p>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
@@ -881,7 +1011,7 @@ const Admin = () => {
                     onChange={(e) => setMilestoneSort(e.target.value)}
                     className="admin-sort-select"
                   >
-                    <option value="default">Default (Order #)</option>
+                    <option value="default">Default (Manual Order)</option>
                     <option value="newest">Date (Newest First)</option>
                     <option value="oldest">Date (Oldest First)</option>
                     <option value="title">Title (A-Z)</option>
@@ -899,6 +1029,11 @@ const Admin = () => {
                     </button>
                   )}
                 </div>
+                {milestoneReorderSuccess && (
+                  <span className="reorder-pill success">
+                    <Check size={13} /> Order saved!
+                  </span>
+                )}
                 <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
                   onClick={() => openAdd("milestone")}>
                   <Plus size={16} /> Add Milestone
@@ -908,15 +1043,45 @@ const Admin = () => {
             <div className="admin-table-container">
               <table className="admin-table">
                 <thead>
-                  <tr><th>#</th><th>Title</th><th>Date / Phase</th><th>Description</th><th>Actions</th></tr>
+                  <tr>
+                    <th style={{ width: "36px", textAlign: "center" }} title="Drag handle"></th>
+                    <th style={{ width: "48px" }}>#</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Date / Phase</th>
+                    <th>Tags</th>
+                    <th>Actions</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {getSortedList(milestones, milestoneSort).map((m, i) => (
-                    <tr key={m.id}>
-                      <td>{m.order ?? i + 1}</td>
+                    <tr 
+                      key={m.id || i}
+                      draggable
+                      onDragStart={(evt) => handleMilestoneDragStart(evt, i)}
+                      onDragOver={(evt) => handleMilestoneDragOver(evt, i)}
+                      onDrop={(evt) => handleMilestoneDrop(evt, i)}
+                      onDragEnd={handleMilestoneDragEnd}
+                      className={`draggable-row ${draggedMilestoneIndex === i ? "is-dragging" : ""} ${dragOverMilestoneIndex === i && draggedMilestoneIndex !== i ? "is-drag-over" : ""}`}
+                    >
+                      <td className="drag-handle-cell" title="Drag to reorder">
+                        <span className="drag-handle-icon">
+                          <GripVertical size={16} />
+                        </span>
+                      </td>
+                      <td>
+                        <span className="order-number-badge">{i + 1}</span>
+                      </td>
                       <td><strong>{m.title}</strong></td>
+                      <td>
+                        <span className="table-badge badge-blue" style={{ fontSize: "0.75rem" }}>
+                          {m.category || "Key Milestone"}
+                        </span>
+                      </td>
                       <td><span className="table-badge badge-blue">{m.date}</span></td>
-                      <td style={{ maxWidth: 260, fontSize: "0.82rem" }}>{m.desc}</td>
+                      <td style={{ maxWidth: 200, fontSize: "0.8rem", color: "var(--text-muted)" }}>
+                        {Array.isArray(m.tags) ? m.tags.join(", ") : (m.tags || "—")}
+                      </td>
                       <td className="action-cell">
                         <button className="icon-btn edit-btn" onClick={() => openEdit("milestone", m)}><Pencil size={15}/></button>
                         <button className="icon-btn del-btn"  onClick={() => handleDelete("milestone", m.id)}><Trash2 size={15}/></button>
@@ -924,7 +1089,7 @@ const Admin = () => {
                     </tr>
                   ))}
                   {milestones.length === 0 && (
-                    <tr><td colSpan={5} style={{ textAlign: "center", color: "var(--text-muted)", padding: "2rem" }}>No milestones yet — click Add Milestone.</td></tr>
+                    <tr><td colSpan={7} style={{ textAlign: "center", color: "var(--text-muted)", padding: "2rem" }}>No milestones yet — click Add Milestone.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -942,7 +1107,7 @@ const Admin = () => {
               <div>
                 <h2>Certifications &amp; Credentials</h2>
                 <p className="section-subtitle-hint">
-                  Manage certifications. Use sort controls to arrange by date or title.
+                  <GripVertical size={14} /> Drag rows using the handle icon to set and save the order.
                 </p>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
@@ -953,7 +1118,7 @@ const Admin = () => {
                     onChange={(e) => setCertSort(e.target.value)}
                     className="admin-sort-select"
                   >
-                    <option value="default">Default (Order #)</option>
+                    <option value="default">Default (Manual Order)</option>
                     <option value="newest">Date (Newest First)</option>
                     <option value="oldest">Date (Oldest First)</option>
                     <option value="title">Title (A-Z)</option>
@@ -971,6 +1136,11 @@ const Admin = () => {
                     </button>
                   )}
                 </div>
+                {certReorderSuccess && (
+                  <span className="reorder-pill success">
+                    <Check size={13} /> Order saved!
+                  </span>
+                )}
                 <button className="btn btn-primary" style={{ fontSize: "0.85rem", padding: "0.5rem 1rem" }}
                   onClick={() => openAdd("certification")}>
                   <Plus size={16} /> Add Certificate
@@ -980,12 +1150,35 @@ const Admin = () => {
             <div className="admin-table-container">
               <table className="admin-table">
                 <thead>
-                  <tr><th>#</th><th>Title</th><th>Issuer</th><th>Date</th><th>Credential Link</th><th>Actions</th></tr>
+                  <tr>
+                    <th style={{ width: "36px", textAlign: "center" }} title="Drag handle"></th>
+                    <th style={{ width: "48px" }}>#</th>
+                    <th>Title</th>
+                    <th>Issuer</th>
+                    <th>Date</th>
+                    <th>Credential Link</th>
+                    <th>Actions</th>
+                  </tr>
                 </thead>
                 <tbody>
                   {getSortedList(certifications, certSort).map((c, i) => (
-                    <tr key={c.id}>
-                      <td>{c.order ?? i + 1}</td>
+                    <tr 
+                      key={c.id || i}
+                      draggable
+                      onDragStart={(evt) => handleCertDragStart(evt, i)}
+                      onDragOver={(evt) => handleCertDragOver(evt, i)}
+                      onDrop={(evt) => handleCertDrop(evt, i)}
+                      onDragEnd={handleCertDragEnd}
+                      className={`draggable-row ${draggedCertIndex === i ? "is-dragging" : ""} ${dragOverCertIndex === i && draggedCertIndex !== i ? "is-drag-over" : ""}`}
+                    >
+                      <td className="drag-handle-cell" title="Drag to reorder">
+                        <span className="drag-handle-icon">
+                          <GripVertical size={16} />
+                        </span>
+                      </td>
+                      <td>
+                        <span className="order-number-badge">{i + 1}</span>
+                      </td>
                       <td><strong>{c.title}</strong></td>
                       <td><span className="table-badge badge-purple">{c.issuer}</span></td>
                       <td>{c.date}</td>
@@ -1005,7 +1198,7 @@ const Admin = () => {
                     </tr>
                   ))}
                   {certifications.length === 0 && (
-                    <tr><td colSpan={6} style={{ textAlign: "center", color: "var(--text-muted)", padding: "2rem" }}>No certifications yet — click Add Certificate.</td></tr>
+                    <tr><td colSpan={7} style={{ textAlign: "center", color: "var(--text-muted)", padding: "2rem" }}>No certifications yet — click Add Certificate.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -1020,6 +1213,21 @@ const Admin = () => {
             exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.3 }}
           >
             <ThemeStudio />
+          </motion.div>
+        )}
+
+        {/* SETTINGS PANEL */}
+        {activeTab === "settings" && (
+          <motion.div key="settings" className="admin-panel-card glass"
+            initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.3 }}
+          >
+            <SettingsPanel
+              projects={projects}
+              events={events}
+              milestones={milestones}
+              certifications={certifications}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -1118,11 +1326,50 @@ const Admin = () => {
           {modal.type === "milestone" && (
             <>
               <div className="modal-grid-2">
-                <Field label="Title *"          name="title" value={formData.title || ""} onChange={handleChange} />
-                <Field label="Date / Phase"     name="date"  value={formData.date || ""}  onChange={handleChange} />
+                <Field label="Title *" name="title" value={formData.title || ""} onChange={handleChange} placeholder="e.g. Kaaputale — E-Commerce" />
+                <Field label="Date / Phase" name="date" value={formData.date || ""} onChange={handleChange} placeholder="e.g. April 2026 | Public" />
               </div>
-              <Field label="Description"      name="desc"  value={formData.desc || ""}  onChange={handleChange} rows={3} />
-              <Field label="Order"            name="order" value={formData.order || ""} onChange={handleChange} type="number" />
+
+              <div className="modal-grid-2">
+                <div className="modal-field">
+                  <label>Category Theme &amp; Icon</label>
+                  <select
+                    name="category"
+                    value={formData.category || "Key Milestone"}
+                    onChange={handleChange}
+                  >
+                    <option value="Education & Degree">🎓 Education &amp; Degree (Blue Theme)</option>
+                    <option value="Project Launch">🚀 Project Launch (Emerald Theme)</option>
+                    <option value="Early Exploration">💡 Early Exploration (Warm Amber Theme)</option>
+                    <option value="Industry Experience">🧭 Industry Experience (Purple Theme)</option>
+                    <option value="Key Milestone">✨ Key Milestone (Indigo/Primary Theme)</option>
+                  </select>
+                </div>
+                <Field label="Order #" name="order" value={formData.order || ""} onChange={handleChange} type="number" />
+              </div>
+
+              <Field
+                label="Tech Stack / Tags (Comma separated)"
+                name="tags"
+                value={formData.tags || ""}
+                onChange={handleChange}
+                placeholder="e.g. React, Vite, Firebase, JavaScript"
+              />
+
+              <Field
+                label="Project Link / URL (Optional)"
+                name="link"
+                value={formData.link || ""}
+                onChange={handleChange}
+                placeholder="e.g. /projects or https://github.com/..."
+              />
+
+              <Field label="Description" name="desc" value={formData.desc || ""} onChange={handleChange} rows={3} placeholder="Describe this milestone..." />
+
+              <div className="order-helper-badge">
+                <span>Display Order: <strong>#{formData.order || milestones.length + 1}</strong></span>
+                <span className="order-helper-hint">💡 Drag and drop rows in the Milestones table to rearrange order anytime!</span>
+              </div>
             </>
           )}
 
@@ -1153,6 +1400,11 @@ const Admin = () => {
                   onUploadSuccess={handleImageUploaded}
                   onError={(msg) => setError(msg)}
                 />
+              </div>
+
+              <div className="order-helper-badge">
+                <span>Display Order: <strong>#{formData.order || certifications.length + 1}</strong></span>
+                <span className="order-helper-hint">💡 Drag and drop rows in the Certifications table to rearrange order anytime!</span>
               </div>
             </>
           )}

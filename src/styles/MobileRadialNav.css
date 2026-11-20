@@ -1,0 +1,246 @@
+/* MobileRadialNav.css — Floating Radial Arc / Action Hub */
+
+/* Only visible on mobile & tablet viewports */
+.radial-nav-wrapper {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .radial-nav-wrapper {
+    display: block;
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 99999;
+    user-select: none;
+  }
+
+  /* ── Dimmed Frosted Backdrop ── */
+  .radial-nav-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99990;
+    background: rgba(10, 15, 28, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* ── Arc Positioning Container ── */
+  .radial-nav-arc-layer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 99995;
+    pointer-events: auto;
+  }
+
+  /* Header Hint Capsule */
+  .radial-hub-header {
+    position: absolute;
+    bottom: 430px;
+    right: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--primary, #E2B4BD);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .radial-hub-header .spin-slow {
+    animation: hubSpin 8s linear infinite;
+  }
+
+  @keyframes hubSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── Arc Items (Icon Bubble + Floating Label) ── */
+  .radial-arc-item {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* Floating Glass Label Pill */
+  .radial-pill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.75rem 0.35rem 0.6rem;
+    border-radius: 9999px;
+    background: rgba(24, 32, 47, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    transition: all 0.2s ease;
+  }
+
+  .radial-arc-item:active .radial-pill-tag,
+  .radial-arc-item.is-active .radial-pill-tag {
+    border-color: var(--item-color, var(--primary));
+    background: rgba(30, 41, 59, 0.95);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 12px var(--item-color);
+  }
+
+  .pill-badge {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--item-color, var(--text-muted));
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  .pill-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text, #f8fafc);
+    letter-spacing: -0.01em;
+  }
+
+  .active-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--item-color, #10b981);
+    box-shadow: 0 0 8px var(--item-color, #10b981);
+    animation: activePulse 2s infinite ease-in-out;
+  }
+
+  @keyframes activePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.4); }
+  }
+
+  /* Circular Glass Icon Bubble */
+  .radial-bubble-orb {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(24, 32, 47, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.5px solid rgba(255, 255, 255, 0.16);
+    color: var(--item-color, var(--text));
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+  }
+
+  .radial-arc-item:active .radial-bubble-orb,
+  .radial-arc-item.is-active .radial-bubble-orb {
+    transform: scale(1.08);
+    border-color: var(--item-color, var(--primary));
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 18px var(--item-color);
+  }
+
+  /* ── Main Trigger Button (FAB) ── */
+  .radial-fab-trigger {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.22);
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: var(--text, #ffffff);
+    box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.6), 0 0 24px rgba(99, 102, 241, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 99999;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .radial-fab-trigger.is-open {
+    border-color: rgba(245, 158, 11, 0.6);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), 0 0 28px rgba(245, 158, 11, 0.5);
+    background: linear-gradient(135deg, rgba(40, 25, 30, 0.95) 0%, rgba(20, 15, 25, 0.98) 100%);
+  }
+
+  .radial-fab-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+  }
+
+  /* Pulsing Beacon Glow Ring when closed */
+  .radial-fab-beacon {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--primary, #6366f1);
+    opacity: 0.6;
+    animation: fabBeaconPulse 2.4s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+    pointer-events: none;
+  }
+
+  @keyframes fabBeaconPulse {
+    0% {
+      transform: scale(0.92);
+      opacity: 0.7;
+    }
+    50% {
+      transform: scale(1.22);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.22);
+      opacity: 0;
+    }
+  }
+}
+
+/* On small phones (< 420px): Slightly adjust dimensions so it never crowds */
+@media (max-width: 420px) {
+  .radial-nav-wrapper {
+    bottom: 1.25rem;
+    right: 1.25rem;
+  }
+
+  .radial-fab-trigger {
+    width: 52px;
+    height: 52px;
+  }
+
+  .radial-bubble-orb {
+    width: 40px;
+    height: 40px;
+  }
+
+  .radial-pill-tag {
+    padding: 0.3rem 0.65rem 0.3rem 0.5rem;
+  }
+
+  .pill-name {
+    font-size: 0.78rem;
+  }
+}

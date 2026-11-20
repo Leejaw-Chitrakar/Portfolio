@@ -51,3 +51,11 @@
   opacity: 0;
   transform: scale(0);
 }
+
+/* Hide custom cursor completely on touch & mobile devices */
+@media (hover: none), (pointer: coarse) {
+  .custom-cursor-inner,
+  .custom-cursor-outer {
+    display: none !important;
+  }
+}

@@ -18,16 +18,19 @@ import {
   Calendar,
 } from 'lucide-react';
 import { subscribeCollection, defaultEvents } from '../services/portfolioService';
+import { useSettings } from '../context/SettingsContext';
 import '../styles/Home.css';
 
 const Home = () => {
+  const { settings } = useSettings();
   const [text, setText] = useState('');
   const fullText = "Full-Stack Web Developer";
   const [index, setIndex] = useState(0);
   const [events, setEvents] = useState(defaultEvents);
-  const [showEventsSection, setShowEventsSection] = useState(true);
   const [activeLightboxIndex, setActiveLightboxIndex] = useState(null);
   const [touchStartX, setTouchStartX] = useState(null);
+
+  const showEventsSection = settings.showEventsSection !== false;
 
   useEffect(() => {
     const unsubscribe = subscribeCollection("events", (data) => {
@@ -135,7 +138,7 @@ const Home = () => {
         <div className="hero-content">
           <div className="badge glass">
             <Sparkles size={14} className="sparkle-icon" />
-            <span>Available for new projects</span>
+            <span>{settings.siteStatusBadge || "Available for new projects"}</span>
           </div>
           
           <h1 className="hero-title">
@@ -337,8 +340,8 @@ const Home = () => {
                 className="lightbox-close-btn"
                 onClick={() => setActiveLightboxIndex(null)}
                 aria-label="Close Lightbox"
+                title="Close"
               >
-                <span>Close (Esc)</span>
                 <X size={16} />
               </button>
             </div>

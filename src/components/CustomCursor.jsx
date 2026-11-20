@@ -1,10 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { useTheme } from "../context/ThemeContext";
+import { useSettings } from "../context/SettingsContext";
 import "../styles/CustomCursor.css";
 
 const CustomCursor = () => {
   const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
   const { theme } = useTheme();
+  const { settings } = useSettings();
+
+  const isEnabled = !isTouchDevice && settings.mouseEffect !== false;
 
   const canvasRef = useRef(null);
   const dotRef = useRef(null);
@@ -12,11 +16,16 @@ const CustomCursor = () => {
   const pos = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const particles = useRef([]);
   const themeRef = useRef(theme);
+  const settingsRef = useRef(settings);
 
-  // Keep themeRef updated so the animation loop always picks up current theme colors
+  // Keep refs updated for animation loop
   useEffect(() => {
     themeRef.current = theme;
   }, [theme]);
+
+  useEffect(() => {
+    settingsRef.current = settings;
+  }, [settings]);
 
   // Convert hex / rgb string to rgba with given alpha
   const hexToRgba = (hexOrRgb, alpha = 0.45) => {
@@ -39,7 +48,7 @@ const CustomCursor = () => {
   };
 
   useEffect(() => {
-    if (isTouchDevice) return;
+    if (!isEnabled) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -84,7 +93,15 @@ const CustomCursor = () => {
         dotRef.current.style.transform = `translate3d(${pos.current.x - 5}px, ${pos.current.y - 5}px, 0)`;
       }
 
-      if (Math.random() > 0.3) createParticle();
+      // Check current density & motion settings
+      const currentSettings = settingsRef.current || {};
+      if (!currentSettings.reducedMotion) {
+        const density = currentSettings.mouseDensity || "balanced";
+        const threshold = density === "subtle" ? 0.65 : density === "dense" ? 0.15 : 0.35;
+        if (Math.random() > threshold) {
+          createParticle();
+        }
+      }
 
       for (let i = 0; i < particles.current.length; i++) {
         const p = particles.current[i];
@@ -123,9 +140,9 @@ const CustomCursor = () => {
       window.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isTouchDevice]);
+  }, [isEnabled]);
 
-  if (isTouchDevice) return null;
+  if (!isEnabled) return null;
 
   return (
     <>

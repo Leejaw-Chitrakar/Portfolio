@@ -6,6 +6,7 @@ import AppRoutes from './RouteLayout/routes.jsx';
 import CustomCursor from './components/CustomCursor.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { ThemeProvider } from './context/ThemeContext.jsx';
+import { SettingsProvider } from './context/SettingsContext.jsx';
 import './styles/global.css';
 
 // Scroll to top on route change
@@ -20,19 +21,21 @@ const ScrollToTop = () => {
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <Router>
-          <ScrollToTop />
-          <CustomCursor />
-          <div className="app-container">
-            <Navbar />
-            <main id="main-content">
-              <AppRoutes />
-            </main>
-            <Footer />
-          </div>
-        </Router>
-      </AuthProvider>
+      <SettingsProvider>
+        <AuthProvider>
+          <Router>
+            <ScrollToTop />
+            <CustomCursor />
+            <div className="app-container">
+              <Navbar />
+              <main id="main-content">
+                <AppRoutes />
+              </main>
+              <Footer />
+            </div>
+          </Router>
+        </AuthProvider>
+      </SettingsProvider>
     </ThemeProvider>
   );
 }

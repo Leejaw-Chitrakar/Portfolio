@@ -194,8 +194,72 @@
   cursor: not-allowed;
 }
 
-/* Mobile Responsive */
+/* Mobile & Touch Responsive: Permanently show title, description, tech stack & buttons */
+@media (max-width: 768px), (hover: none) {
+  .fusion-card {
+    height: auto !important;
+    min-height: 380px;
+  }
+
+  .fusion-card-image {
+    filter: brightness(0.65) grayscale(0%);
+    transform: scale(1.02);
+  }
+
+  .fusion-card-glass {
+    position: relative;
+    min-height: 380px;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.75) 40%, rgba(15, 23, 42, 0.98) 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 1.5rem 1.25rem;
+  }
+
+  .fusion-card-default {
+    display: none !important;
+  }
+
+  .fusion-card-hover {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+  }
+
+  .fusion-title {
+    font-size: 1.35rem;
+  }
+
+  .fusion-desc {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    -webkit-line-clamp: 3;
+  }
+
+  .fusion-tech-stack {
+    gap: 0.4rem;
+  }
+
+  .fusion-tech-tag {
+    font-size: 0.68rem;
+    padding: 0.25rem 0.65rem;
+  }
+
+  .fusion-actions {
+    display: flex;
+    gap: 0.65rem;
+    margin-top: 0.6rem;
+    width: 100%;
+  }
+
+  .fusion-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.84rem;
+  }
+}
+
 @media (max-width: 640px) {
-  .fusion-title { font-size: 1.5rem; }
-  .fusion-card-glass { padding: 1.5rem; }
+  .fusion-title { font-size: 1.25rem; }
+  .fusion-card-glass { padding: 1.25rem 1rem; }
 }
